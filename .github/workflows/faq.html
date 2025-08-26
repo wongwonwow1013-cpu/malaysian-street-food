@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ - Malaysian Street Food</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dishes.html">Dishes</a></li>
+      <li><a href="featured.html">Featured</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="location.html">Locations</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a class="active" href="faq.html">FAQ</a></li>
+      <li><a href="events.html">Events</a></li>
+    </ul>
+  </nav>
+
+  <main class="section">
+    <h1>Frequently Asked Questions</h1>
+    <div class="underline"></div>
+
+    <div class="faq-container">
+      <!-- FAQ 1 -->
+      <div class="faq-item">
+        <button class="faq-question">1. What types of street food do you feature? <span class="icon">+</span></button>
+        <div class="faq-answer">
+          <p>We showcase popular and unique street foods from around the world, such as grilled skewers, crepes, pad thai, takoyaki, and more.</p>
+        </div>
+      </div>
+
+      <!-- FAQ 2 -->
+      <div class="faq-item">
+        <button class="faq-question">2. Where do you get your information? <span class="icon">+</span></button>
+        <div class="faq-answer">
+          <p>Our team personally visits street food stalls, takes photos, and gathers details from trusted reviews and local recommendations.</p>
+        </div>
+      </div>
+
+      <!-- FAQ 3 -->
+      <div class="faq-item">
+        <button class="faq-question">3. How often is the website updated? <span class="icon">+</span></button>
+        <div class="faq-answer">
+          <p>We publish at least two new street food features every week.</p>
+        </div>
+      </div>
+
+      <!-- FAQ 4 -->
+      <div class="faq-item">
+        <button class="faq-question">4. Do you provide a street food map? <span class="icon">+</span></button>
+        <div class="faq-answer">
+          <p>Yes! We include Google Maps links so you can easily find the stalls.</p>
+        </div>
+      </div>
+
+      <!-- FAQ 5 -->
+      <div class="faq-item">
+        <button class="faq-question">5. Can I suggest or submit a street food recommendation? <span class="icon">+</span></button>
+        <div class="faq-answer">
+          <p>Absolutely! Visit our <a href="contact.html">Contact</a> page to share your favorite street food with us.</p>
+        </div>
+      </div>
+
+      <!-- FAQ 6 -->
+      <div class="faq-item">
+        <button class="faq-question">6. Do you provide street food reviews or ratings? <span class="icon">+</span></button>
+        <div class="faq-answer">
+          <p>Yes, each featured street food comes with a short review, flavor notes, and a rating based on taste, price, and atmosphere.</p>
+        </div>
+      </div>
+
+      <!-- FAQ 7 -->
+      <div class="faq-item">
+        <button class="faq-question">7. Are your food guides free to access? <span class="icon">+</span></button>
+        <div class="faq-answer">
+          <p>Absolutely! All our articles and maps are free to view — no subscription required.</p>
+        </div>
+      </div>
+
+      <!-- FAQ 8 -->
+      <div class="faq-item">
+        <button class="faq-question">8. Do you only feature street food from certain countries? <span class="icon">+</span></button>
+        <div class="faq-answer">
+          <p>No, our goal is to explore street food from all over the world, from night markets in Asia to food trucks in the US and Europe.</p>
+        </div>
+      </div>
+
+      <!-- FAQ 9 -->
+      <div class="faq-item">
+        <button class="faq-question">9. Can I use your photos for my own blog or project? <span class="icon">+</span></button>
+        <div class="faq-answer">
+          <p>You may use our photos only with prior permission and proper credit to Malaysian Street Food. Please contact us for details.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 Malaysian Street Food. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Accordion toggle
+    document.querySelectorAll('.faq-question').forEach(button => {
+      button.addEventListener('click', () => {
+        const faqItem = button.parentElement;
+        faqItem.classList.toggle('active');
+      });
+    });
+  </script>
+</body>
+</html>
