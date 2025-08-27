@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Street Food Website - Contact & Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      position: relative;
+      min-height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url("A_photograph_showcases_an_assortment_of_Malaysian_.png") no-repeat center center fixed;
+      background-size: cover;
+      filter: blur(5px);
+      z-index: -2;
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      z-index: -1;
+    }
+    .form-container, .admin-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body class="flex flex-col">
+  <!-- Navbar -->
+  <header class="bg-orange-600 text-white shadow-md">
+    <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
+      <h1 class="text-lg font-bold flex items-center gap-2">🍜 Malaysia Local Food Street</h1>
+      <nav>
+        <ul class="flex gap-6">
+          <li><button id="showContact" class="hover:underline font-semibold">Contact Us</button></li>
+          <li><button id="showAdmin" class="hover:underline">Admin Panel</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow flex items-center justify-center p-6">
+    <!-- Contact Form -->
+    <div id="contactSection" class="form-container w-full max-w-md">
+      <h2 class="text-center text-2xl font-semibold text-orange-600 mb-6">Contact Us</h2>
+      <form id="contactForm" class="space-y-4">
+        <div>
+          <label class="block font-medium">Username</label>
+          <input type="text" id="username" placeholder="e.g., Francis Kong" class="w-full border rounded px-3 py-2" required>
+        </div>
+        <div>
+          <label class="block font-medium">Gmail</label>
+          <input type="email" id="gmail" placeholder="e.g., franciskong@gmail.com" class="w-full border rounded px-3 py-2" required>
+        </div>
+        <div>
+          <label class="block font-medium">Message</label>
+          <textarea id="message" placeholder="Please type your comment here" class="w-full border rounded px-3 py-2" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="w-full bg-orange-600 text-white py-2 rounded hover:bg-orange-700 transition">
+          Send Message
+        </button>
+      </form>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminSection" class="admin-container w-full max-w-4xl hidden">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-semibold text-orange-600">Stored Contact Messages</h2>
+        <button id="clearAllBtn" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">
+          Clear All Messages
+        </button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse border border-gray-300 bg-white shadow-lg table-fixed">
+          <thead class="bg-orange-600 text-white">
+            <tr>
+              <th class="border border-gray-300 px-4 py-2 w-1/6">Username</th>
+              <th class="border border-gray-300 px-4 py-2 w-1/3">Gmail</th>
+              <th class="border border-gray-300 px-4 py-2 w-1/2">Message</th>
+              <th class="border border-gray-300 px-4 py-2 w-1/6">Action</th>
+            </tr>
+          </thead>
+          <tbody id="contactTable" class="text-center">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const contactSection = document.getElementById("contactSection");
+    const adminSection = document.getElementById("adminSection");
+    const adminPassword = "admin123"; // Change this to your desired password
+
+    document.getElementById("showContact").addEventListener("click", () => {
+      contactSection.classList.remove("hidden");
+      adminSection.classList.add("hidden");
+    });
+
+    document.getElementById("showAdmin").addEventListener("click", () => {
+      const input = prompt("Enter admin password:");
+      if(input === adminPassword){
+        contactSection.classList.add("hidden");
+        adminSection.classList.remove("hidden");
+        loadMessages();
+      } else {
+        alert("❌ Incorrect password! Access denied.");
+      }
+    });
+
+    document.getElementById("contactForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const username = document.getElementById("username").value;
+      const gmail = document.getElementById("gmail").value;
+      const message = document.getElementById("message").value;
+
+      const newMessage = { username, gmail, message };
+      const messages = JSON.parse(localStorage.getItem("contactMessages")) || [];
+      messages.push(newMessage);
+      localStorage.setItem("contactMessages", JSON.stringify(messages));
+
+      alert("✅ Your message has been sent!");
+      this.reset();
+    });
+
+    function loadMessages() {
+      const storedData = JSON.parse(localStorage.getItem("contactMessages")) || [];
+      const tableBody = document.getElementById("contactTable");
+      tableBody.innerHTML = "";
+
+      if (storedData.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="4" class="p-4 text-gray-500">No messages stored yet.</td></tr>`;
+        return;
+      }
+
+      storedData.forEach((msg, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="border border-gray-300 px-4 py-2 break-words">${msg.username}</td>
+          <td class="border border-gray-300 px-4 py-2 break-words">${msg.gmail}</td>
+          <td class="border border-gray-300 px-4 py-2 text-left break-words">${msg.message}</td>
+          <td class="border border-gray-300 px-4 py-2">
+            <button onclick="deleteMessage(${index})" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition font-bold">✖</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    function deleteMessage(index) {
+      if(confirm("Are you sure you want to delete this message?")){
+        let storedData = JSON.parse(localStorage.getItem("contactMessages")) || [];
+        storedData.splice(index, 1);
+        localStorage.setItem("contactMessages", JSON.stringify(storedData));
+        loadMessages();
+      }
+    }
+
+    document.getElementById("clearAllBtn").addEventListener("click", () => {
+      if(confirm("Are you sure you want to clear ALL messages? This action cannot be undone.")){
+        localStorage.removeItem("contactMessages");
+        loadMessages();
+      }
+    });
+  </script>
+</body>
+</html>

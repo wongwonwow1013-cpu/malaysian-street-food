@@ -4,125 +4,184 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>About</title>
+
   <link rel="stylesheet" href="style.css" />
+
+
+
 </head>
 <body>
 
-  <!-- Navbar -->
+  <!-- navigator -->
   <nav>
     <ul>
       <li><a href="index.html">Home</a></li>
       <li><a href="dishes.html">Dishes</a></li>
       <li><a href="featured.html">Featured</a></li>
-      <li><a href="gallery.html">Gallery</a></li>
       <li><a href="location.html">Locations</a></li>
-      <li><a href="reviews.html">Reviews</a></li>
-      <li><a href="contact.html">Contact</a></li>
       <li><a class="active" href="about.html">About Us</a></li>
       <li><a href="faq.html">FAQ</a></li>
       <li><a href="events.html">Events</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
+      <li><a href="contact.html">Contact</a></li>
     </ul>
   </nav>
 
   <main>
-    <section class="section" id="about">
-      <h2>ABOUT <span style="color:#333">MALAYSIA STREET FOOD</span></h2>
-      <div class="underline"></div>
+<section class="section" id="about">
+  <h2>ABOUT <span style="color:#333">MALAYSIA STREET FOOD</span></h2>
+  <div class="underline"></div>
 
-      <div class="about-wrap">
-        <img class="about-img" src="logo.jpg" alt="logo">
+  <div class="about-wrap">
+    <img id="about-img" class="about-img" src="logo.jpg" alt="Street Food">
 
-        <div class="about-text">
-          <p>Malaysia’s food streets are a vibrant reflection of the country’s rich cultural diversity, offering an exciting mix of Malay, Chinese, Indian, and other ethnic cuisines.</p>
-          <p>Bustling with life, these streets are lined with stalls and eateries serving everything from spicy satay and fragrant nasi lemak to crispy roti canai and flavorful char kway teow.</p>
-          <p>Malaysia’s food streets capture the essence of communal dining, where people gather to enjoy affordable, delicious meals in a welcoming atmosphere.</p>
-        </div>
-      </div>
-    </section>
+    <div class="about-text">
+      <p id="about-desc">
+        Malaysia’s food streets are a vibrant reflection of the country’s rich cultural diversity, offering an exciting mix of Malay, Chinese, Indian, and other ethnic cuisines.
+      </p>
+
+    </div>
+  </div>
+
+  <div class="about-controls">
+    <button onclick="prevSlide()">⟨ Prev</button>
+    <button onclick="nextSlide()">Next ⟩</button>
+  </div>
+</section>
 
     <!-- OUR MISSION -->
     <section class="section" id="mvw">
       <h2>OUR <span style="color:#333">MISSION, VISION, VALUE</span></h2>
       <div class="underline"></div>
         
+      <!--MISSION -->
       <div class="mvw">
         <article class="mvw-card">
           <img class="mvw-thumb" src="mission.jpg" alt="Mission">
+
           <p><strong>MISSION</strong></p>
           <p>Our mission is to showcase Malaysia’s diverse street food culture.</p>
+
         </article>
 
+        <!-- Vision -->
         <article class="mvw-card">
           <img class="mvw-thumb" src="vision.jpg" alt="vision">
+
           <p><strong>VISION</strong></p>
           <p>Our vision is to be the go-to online destination for discovering Malaysia’s food streets.</p>
+
         </article>
 
+        <!-- Values -->
         <article class="mvw-card">
           <img class="mvw-thumb" src="value.jpg" alt="value">
+
           <p><strong>VALUE</strong></p>
           <p>Our value is authenticity, community, cultural appreciation, and passion for great food.</p>
+
         </article>
       </div>
     </section>
 
-    <!-- Team -->
+    <!-- member 1 -->
     <section class="section" id="team">
       <h2>MEET <span style="color:#333">OUR TEAM</span></h2>
       <div class="underline"></div>
 
       <div class="team">
         <article class="team-card">
-          <img class="avatar" src="a.jpg" alt="henry">
-          <h3><span style="color:#333">Wong Cheng Long</span></h3>
+          <img class="avatar" src="loong.png" alt="loong">
+          <h3><span style="color:#333">Wong Cheng Loong</span></h3>
           <p><em>-Web Developer</em></p>
-          <p>Henry brings the site with functional code. From smooth navigation to interactive features, he ensures our visitors enjoy a journey through Malaysia’s flavorful street food scene.</p>
+          <p>Loong brings the site with functional code. From smooth navigation to interactive features, he ensures our visitors enjoy a journey through Malaysia’s flavorful street food scene.</p>
           <div class="icons">
-            <a href="https://instagram.com" target="_blank" title="Instagram">
-              <img src="ins.jpg" alt="Instagram" class="icon-img">
-            </a>
+          <a href="https://instagram.com" target="_blank" title="Instagram"> <img src="ins.jpg" alt="Instagram" class="icon-img"></a>
           </div>
+
         </article>
 
+        <!-- Member 2 -->
         <article class="team-card">
-          <img class="avatar" src="a.jpg" alt="BT">
+          <img class="avatar" src="BoonTeik.jpeg" alt="BT">
           <h3><span style="color:#333">Loh Boon Teik</span></h3>
           <p><em>-Media & Marketing Manager</em></p>
           <p>Loh captures the colors, sounds, and aromas of Malaysian street food through stunning visuals and engaging promotions.</p>
           <div class="icons">
-            <a href="https://instagram.com" target="_blank" title="Instagram">
-              <img src="ins.jpg" alt="Instagram" class="icon-img">
-            </a>
+          <a href="https://instagram.com" target="_blank" title="Instagram"> <img src="ins.jpg" alt="Instagram" class="icon-img"></a>
           </div>
+          
         </article>
 
+        <!-- Member 3 -->
         <article class="team-card">
-          <img class="avatar" src="a.jpg" alt="wong ming jie">
+          <img class="avatar" src="jie.jpeg" alt="wong ming jie">
           <h3><span style="color:#333">Wong Ming Jie</span></h3>
           <p><em>-Web Designer</em></p>
           <p>Wong transforms ideas into beautiful, user-friendly designs. He crafts layouts and visuals that make exploring Malaysian street food an enjoyable online experience.</p>
           <div class="icons">
-            <a href="https://instagram.com" target="_blank" title="Instagram">
-              <img src="ins.jpg" alt="Instagram" class="icon-img">
-            </a>
+          <a href="https://instagram.com" target="_blank" title="Instagram"> <img src="ins.jpg" alt="Instagram" class="icon-img"></a>
           </div>
+          
         </article>
 
+        <!-- Member 4 -->
         <article class="team-card">
-          <img class="avatar" src="a.jpg" alt="Lim Guan Jun">
+          <img class="avatar" src="Henry.jpeg" alt="Lim Guan Jun">
           <h3><span style="color:#333">Lim Guan Jun</span></h3>
           <p><em>-Content Creator / Researcher</em></p>
-          <p>Lim has a passion for storytelling and Malaysian cuisine. He ensures our website captures the true essence of Malaysia’s street food culture.</p>
+          <p>Lim has a passion for storytelling and Malaysian cuisine. He ensuring our website captures the true essence of Malaysia’s street food culture.</p>
           <div class="icons">
-            <a href="https://instagram.com" target="_blank" title="Instagram">
-              <img src="ins.jpg" alt="Instagram" class="icon-img">
-            </a>
+          <a href="https://instagram.com" target="_blank" title="Instagram"> <img src="ins.jpg" alt="Instagram" class="icon-img"></a>
           </div>
+          
         </article>
       </div>
     </section>
   </main>
+<script>
+  // Array of slides (image + description)
+  const slides = [
 
-  <footer>^_^</footer>
+    {
+      img: "chinese.jpg",
+      desc: "Chinese street food in Malaysia is famous for dishes like dim sum, wantan mee, and claypot chicken rice, often characterized by savory soy-based flavors, aromatic garlic, and wok hei (smoky wok aroma) that bring comforting warmth to every bite."
+    },
+    {
+      img: "indian.jpg",
+      desc: "Indian street food adds bold spices and hearty textures, with must-try favorites like roti canai, thosai, and murtabak served with rich curries, making it a beloved choice for those craving strong, aromatic, and satisfying flavors."
+    },
+    {
+      img: "malay.jpg",
+      desc: "Malay street food highlights bold spices and coconut richness, with staples like nasi lemak, satay with peanut sauce, and ayam percik, offering a balance of spicy, sweet, and creamy tastes that embody the essence of traditional Malay cooking."
+    },
+    {
+      img:"logo.jpg",
+      desc:"Malaysia’s food streets are a vibrant reflection of the country’s rich cultural diversity, offering an exciting mix of Malay, Chinese, Indian, and other ethnic cuisines."
+    }
+  ];
+
+  let current = 0;
+
+  function showSlide(index) {
+    const imgEl = document.getElementById("about-img");
+    const descEl = document.getElementById("about-desc");
+
+    imgEl.src = slides[index].img;
+    descEl.textContent = slides[index].desc;
+  }
+
+  function nextSlide() {
+    current = (current + 1) % slides.length;
+    showSlide(current);
+  }
+
+  function prevSlide() {
+    current = (current - 1 + slides.length) % slides.length;
+    showSlide(current);
+  }
+</script>
+  <footer>© 2025 Malaysian Street Food. All rights reserved.</footer>
 </body>
 </html>
+

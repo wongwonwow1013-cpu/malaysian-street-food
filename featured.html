@@ -1,63 +1,280 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dish of the Week</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Featured — Malaysian Street Food</title>
+
+  <!-- KEEP your global site stylesheet so navbar/footer remain identical -->
   <link rel="stylesheet" href="style.css" />
-  
 </head>
+
 <body>
 
-  <!-- Navbar -->
-  <!-- Navbar -->
-<nav>
-  <ul>
-    <li><a href="index.html">Home</a></li>
-    <li><a href="dishes.html">Dishes</a></li>
-    <li><a href="featured.html">Featured</a></li>
-    <li><a href="gallery.html">Gallery</a></li>
-    <li><a href="location.html">Locations</a></li>
-    <li><a href="reviews.html">Reviews</a></li>
-    <li><a href="contact.html">Contact</a></li>
-    <li><a href="about.html">About Us</a></li>
-    <li><a class="active" href="faq.html">FAQ</a></li>
-    <li><a href="events.html">Events</a></li>
-  </ul>
-</nav>
+  <!-- NAVBAR -->
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dishes.html">Dishes</a></li>
+      <li><a class="active" href="featured.html">Featured</a></li>
+      <li><a href="location.html">Locations</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="events.html">Events</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
 
+  <!-- MAIN -->
+  <main class="section">
+    <h2>✨ Featured Dish</h2>
+    <div class="underline"></div>
 
-  <main>
-    <div class="featured-container">
-      <h1>🍽 Dish of the Week</h1>
-      <div id="dishContent">
-        <p class="loading">Loading dish details...</p>
-      </div>
-    </div>
+    <div class="featured-container" id="featured-container"></div>
+
+    <button class="next-btn" id="nextBtn">Show Another Dish 🍽️</button>
   </main>
 
+  <!-- FOOTER -->
   <footer>
     <p>© 2025 Malaysian Street Food. All rights reserved.</p>
   </footer>
 
   <script>
-    // Fetch a random meal from TheMealDB API
-    fetch("https://www.themealdb.com/api/json/v1/1/random.php")
-      .then(response => response.json())
-      .then(data => {
-        const meal = data.meals[0];
-        document.getElementById("dishContent").innerHTML = `
-          <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
-          <h2>${meal.strMeal}</h2>
-          <p><strong>Category:</strong> ${meal.strCategory} | <strong>Area:</strong> ${meal.strArea}</p>
-          <p>${meal.strInstructions.substring(0, 300)}...</p>
-          <a href="${meal.strSource || '#'}" target="_blank">Read more</a>
-        `;
-      })
-      .catch(error => {
-        console.error("Error fetching meal:", error);
-        document.getElementById("dishContent").innerHTML = `<p>Failed to load dish details. Please try again later.</p>`;
-      });
+        const dishes = [
+  {
+    name: "Nasi Lemak",
+    img: "images/nasi-lemak.jpg",
+    stars: 3,
+    desc: "Coconut-milk rice with spicy sambal, crispy anchovies, roasted peanuts, cucumber, and egg.",
+    recipe: "Cook rice with coconut milk & pandan. Make sambal (chilies, onions, tamarind). Serve with fried anchovies, peanuts, cucumber, egg.",
+    youtubeEmbed: `<iframe width="100%" height="360" src="https://www.youtube.com/embed/VbTle9T6fDk" title="Nasi Lemak tutorial" frameborder="0" allowfullscreen></iframe>`
+  },
+  {
+    name: "Char Kway Teow",
+    img: "images/cha-kway-teow.jpg",
+    stars: 4,
+    desc: "Flat rice noodles stir-fried with prawns, cockles, eggs and chives.",
+    recipe: "Wok-fry noodles with prawns, cockles, Chinese sausage, egg & chives.",
+    youtubeEmbed: '<iframe width="100%" height="360" src="https://www.youtube.com/embed/n-fFtPbTGHk?si=WrqrXOdsvzUT61Tk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
+    name: "Laksa",
+    img: "images/laksa.jpg",
+    stars: 4,
+    desc: "Spicy noodle soup with coconut curry broth and seafood or chicken.",
+    recipe: "Make laksa paste, simmer with stock & coconut milk, add noodles & toppings.",
+    youtubeEmbed: '<iframe width="100%" height="360" src="https://www.youtube.com/embed/I7jM1QzGajQ?si=Pl_2MoHGJ9NvSrBA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
+    name: "Nasi Kandar",
+    img: "images/nasi-kandar.jpg",
+    stars: 4,
+    desc: "Steam rice served with a variety of curries and sides (banjir-style).",
+    recipe: "Serve rice and ladle over mixed curries with fried sides.",
+    youtubeEmbed: '<iframe width="100%" height="360" src="https://www.youtube.com/embed/NNcpq2WKqD4?si=gBAGNbrjZaC5ayEg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
+    name: "Hokkien Mee",
+    img: "images/hokkien-mee.jpg",
+    stars: 3,
+    desc: "Thick yellow noodles wok-fried in dark soy with pork, prawns and cabbage.",
+    recipe: "Fry aromatics, add pork/prawns, toss in noodles and sauces.",
+    youtubeEmbed: '<iframe width="100%" height="360" src="https://www.youtube.com/embed/ZDmGT_g8SsY?si=oZFbD1LBrk3zaPKq" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
+    name: "Satay",
+    img: "images/satay.jpg",
+    stars: 3,
+    desc: "Charcoal-grilled skewers of marinated meat served with peanut sauce.",
+    recipe: "Marinate meat, skewer, grill and serve with peanut sauce.",
+    youtubeEmbed: '<iframe width="100%" height="360" src="https://www.youtube.com/embed/OP2NXqTTMr0?si=Al0PPk7sxiidaMmd" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
+    name: "Roti Canai",
+    img: "images/roti-canai.jpg",
+    stars: 2,
+    desc: "Flaky, layered flatbread usually served with dhal or curry.",
+    recipe: "Prepare dough, stretch thin, fold/coil and pan-fry until golden.",
+    youtubeEmbed: '<iframe width="100%" height="360" src="https://www.youtube.com/embed/i5EgTcW8hNc?si=AsDA05JJls1bLgyQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
+    name: "Mee Goreng",
+    img: "images/mee-goreng.jpg",
+    stars: 2,
+    desc: "Spicy-sweet fried yellow noodles with tofu, veggies and egg.",
+    recipe: "Stir-fry noodles with sambal, sauces, tofu and egg.",
+    youtubeEmbed: '<iframe width="100%" height="360" src="https://www.youtube.com/embed/j_a2szbPzfA?si=oLGZzoqhqMXchx8W" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
+    name: "Asam Pedas",
+    img: "images/asam-pedas.jpg",
+    stars: 3,
+    desc: "Tangy, spicy tamarind-based fish/seafood stew with vegetables.",
+    recipe: "Simmer tamarind broth with spices and fish; add okra & tomatoes.",
+    youtubeEmbed: '<iframe width="100%" height="360" src="https://www.youtube.com/embed/KWJKljlHfB0?si=0L46-Xy4IrjT5lJ5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
+    name: "Kuih Muih",
+    img: "images/kuih.jpg",
+    stars: 2,
+    desc: "Assorted traditional bite-sized Malay cakes (kuih).",
+    recipe: "Varies by kuih — common methods include steaming and layering.",
+    youtubeEmbed: '<iframe width="100%" height="360" src="https://www.youtube.com/embed/2otOKVySQ5M?si=sIkPNMy8IBU5mJG_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
+    name: "Pisang Goreng",
+    img: "images/pisang-goreng.jpg",
+    stars: 1,
+    desc: "Crispy-on-the-outside, soft-inside fried bananas.",
+    recipe: "Coat banana in batter and deep-fry until golden.",
+    youtubeEmbed: '<iframe width="100%" height="360" src="https://www.youtube.com/embed/eVkj_POEL-o?si=9XBJ-_uLlazhNt1o" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
+    name: "Apam Balik",
+    img: "images/apam-balik.jpg",
+    stars: 2,
+    desc: "Crispy folded pancake stuffed with peanuts, sugar and sometimes corn.",
+    recipe: "Cook batter on a griddle, sprinkle filling and fold.",
+    youtubeEmbed: '<iframe width="100%" height="360" src="https://www.youtube.com/embed/6R8ffRRJcrg?si=EM5WhUgWnyfEqMrF" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
+    name: "Rojak",
+    img: "images/rojak.jpg",
+    stars: 2,
+    desc: "Fruity-vegetable salad tossed in shrimp paste, lime and peanuts.",
+    recipe: "Mix fruits & veg, toss in shrimp-paste dressing and top with peanuts.",
+    youtubeEmbed: '<iframe width="100%" height="360" src="https://www.youtube.com/embed/EQKHzy6MlVE?si=bN_bhgT4rzOiSW0i" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
+    name: "Keropok Lekor",
+    img: "images/keropok-lekor.jpg",
+    stars: 2,
+    desc: "Fish sausage snack — chewy inside and crispy outside when fried.",
+    recipe: "Blend fish with sago, shape, boil then fry; serve with chili.",
+    youtubeEmbed: '<iframe width="100%" height="360" src="https://www.youtube.com/embed/6qY-CoT8Cs4?si=x7ILEPq-E_zWbM_Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
+    name: "Cendol",
+    img: "images/cendol.jpg",
+    stars: 2,
+    desc: "Shaved ice dessert with coconut milk, palm sugar syrup and green jelly.",
+    recipe: "Assemble cendol jellies, shaved ice, coconut milk and gula melaka.",
+    youtubeEmbed: '<iframe width="100%" height="360" src="https://www.youtube.com/embed/UaqD5YoC0bU?si=c6EEoJFpL3jo28ZB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
+    name: "Ais Kacang",
+    img: "images/ais-kacang.jpg",
+    stars: 2,
+    desc: "Colorful shaved-ice mountain with beans, corn, jellies and syrups.",
+    recipe: "Pile shaved ice, add syrups and toppings, drizzle condensed/evaporated milk.",
+    youtubeEmbed: '<iframe width="100%" height="360" src="https://www.youtube.com/embed/blKkLI0W8CE?si=n_PPYVzmMK3gPwnR" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
+    name: "Kuih Lapis",
+    img: "images/kuih-lapis.jpg",
+    stars: 3,
+    desc: "Steamed rainbow-layered cake made with rice/tapioca flours and coconut milk.",
+    recipe: "Steam thin colored batter layers one at a time until set.",
+    youtubeEmbed: '<iframe width="100%" height="360" src="https://www.youtube.com/embed/jmBlCzT_ooE?si=0q8btM-h2LWXd7e3" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
+    name: "Bubur Cha Cha",
+    img: "images/bubur-cha-cha.jpg",
+    stars: 3,
+    desc: "Coconut milk dessert with sweet potato, yam and tapioca pearls.",
+    recipe: "Boil tubers and tapioca, simmer with coconut milk & pandan.",
+    youtubeEmbed: '<iframe width="100%" height="360" src="https://www.youtube.com/embed/uoEXv0xPNk0?si=cIlRnWtg45qaukK_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
+    name: "Teh Tarik",
+    img: "images/teh-tarik.jpg",
+    stars: 1,
+    desc: "Pulled frothy milk tea — smooth and sweet.",
+    recipe: "Brew strong tea, mix with condensed/evaporated milk and 'pull' between cups.",
+    youtubeEmbed: '<iframe width="100%" height="360" src="https://www.youtube.com/embed/uoEXv0xPNk0?si=cIlRnWtg45qaukK_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
+    name: "Milo Dinosaur",
+    img: "images/milo-dinosaur.jpg",
+    stars: 1,
+    desc: "Iced Milo drink topped with a heap of Milo powder.",
+    recipe: "Mix Milo with milk & ice, top with extra Milo powder.",
+    youtubeEmbed: '<iframe width="100%" height="360" src="https://www.youtube.com/embed/Fae-bZ3kbgM?si=NOO2T5v1qE4-o0X7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
+    name: "Air Bandung",
+    img: "images/air-bandung.jpg",
+    stars: 1,
+    desc: "Rose-flavoured milk drink — sweet and floral.",
+    recipe: "Mix rose syrup with milk and ice, serve chilled.",
+    youtubeEmbed: '<iframe width="100%" height="360" src="https://www.youtube.com/embed/VwpnQeybWG0?si=mks_vyO0UslPrkOj" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
+    name: "Coconut Water",
+    img: "images/coconut-water.jpg",
+    stars: 1,
+    desc: "Fresh chilled coconut water — simple and refreshing.",
+    recipe: "Chill fresh coconut, crack and serve.",
+    youtubeEmbed:'<iframe width="100%" height="360" src="https://www.youtube.com/embed/4XHK6eIy6qc?si=RDNWyhjDf28K8ZQ6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  }
+];
+
+    let available = [...dishes];
+
+    function getStars(count) {
+      return "★".repeat(count) + "☆".repeat(5 - count);
+    }
+
+    function renderDish(dish) {
+      const videoHtml = dish.youtubeEmbed && dish.youtubeEmbed.trim()
+        ? `<div class="video-wrap">${dish.youtubeEmbed}</div>`
+        : `<div class="video-placeholder">Video not added yet.</div>`;
+
+      document.getElementById('featured-container').innerHTML = `
+        <div class="featured-card">
+          <img src="${dish.img}" alt="${dish.name}">
+          <div class="featured-info">
+            <h2>${dish.name}</h2>
+            <div class="stars">${getStars(dish.stars)}</div>
+            <div class="desc">${dish.desc}</div>
+            <div class="recipe"><strong>📖 Recipe:</strong> ${dish.recipe}</div>
+            ${videoHtml}
+          </div>
+        </div>
+      `;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showRandomDish() {
+      if (available.length === 0) available = [...dishes];
+      const i = Math.floor(Math.random() * available.length);
+      const dish = available.splice(i, 1)[0];
+      renderDish(dish);
+    }
+
+    // ✅ NEW: check query string
+    function showDishFromQuery() {
+      const params = new URLSearchParams(window.location.search);
+      const dishName = params.get("dish");
+      if (dishName) {
+        const dish = dishes.find(d => d.name.toLowerCase() === dishName.toLowerCase());
+        if (dish) {
+          renderDish(dish);
+          return true;
+        }
+      }
+      return false;
+    }
+
+    document.getElementById('nextBtn').addEventListener('click', showRandomDish);
+
+    window.onload = () => {
+      if (!showDishFromQuery()) {
+        showRandomDish();
+      }
+    };
   </script>
 </body>
 </html>

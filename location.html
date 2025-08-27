@@ -4,23 +4,24 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Locations • Malaysia Street Food</title>
+
   <link rel="stylesheet" href="style.css" />
+
 </head>
 <body>
 
-  <!-- Navbar -->
+  <!-- navigator -->
   <nav>
     <ul>
       <li><a href="index.html">Home</a></li>
       <li><a href="dishes.html">Dishes</a></li>
       <li><a href="featured.html">Featured</a></li>
-      <li><a href="gallery.html">Gallery</a></li>
       <li><a class="active" href="location.html">Locations</a></li>
-      <li><a href="reviews.html">Reviews</a></li>
-      <li><a href="contact.html">Contact</a></li>
       <li><a href="about.html">About Us</a></li>
       <li><a href="faq.html">FAQ</a></li>
       <li><a href="events.html">Events</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
+      <li><a href="contact.html">Contact</a></li>
     </ul>
   </nav>
 
@@ -28,59 +29,85 @@
     <section class="section">
       <h2>EXPLORE <span style="color:#333">MALAYSIA FOOD STREET BY STATE</span></h2>
       <div class="underline"></div>
-
-      <!-- Last viewed banner -->
       <div id="lastViewed" class="last-viewed"></div>
-
       <div class="map-container">
+
         <!-- Left: map -->
         <div class="map-wrap">
           <img id="msiaMap" src="msiamap.jpg" alt="Map of Malaysia" usemap="#msia">
           <map name="msia" id="msia">
             <area alt="Perlis" title="Perlis" coords="58,52,65,56,69,62,58,74,42,76,29,67" shape="poly">
-            <area alt="Kedah" title="Kedah" coords="71,63,60,75,67,102,75,106,78,123,87,114,96,98,97,90,102,88,100,73,84,64,78,65" shape="poly">
-            <area alt="Penang" title="Penang" coords="74,123,57,121,55,107,64,101,72,107,73,114" shape="poly">
+            <area alt="Kedah" title="Kedah"  coords="71,63,60,75,67,102,75,106,78,123,87,114,96,98,97,90,102,88,100,73,84,64,78,65" shape="poly">
+            <area alt="Penang" title="Penang"  coords="74,123,57,121,55,107,64,101,72,107,73,114" shape="poly">
             <area alt="Perak" title="Perak" coords="119,181,116,167,112,157,109,150,109,138,112,129,112,120,116,114,121,111,120,100,121,89,111,87,103,90,101,99,93,102,90,108,89,113,83,119,79,124,73,126,67,131,76,138,74,145,75,150,74,157,76,161,80,168,82,179,90,177,94,183,104,186" shape="poly">
-            <area alt="Selangor" title="Selangor" coords="81,181,88,181,101,186,108,187,114,187,122,186,126,190,125,198,129,205,131,212,129,217,124,224,121,233,111,230,104,222,102,206,95,194" shape="poly">
-            <area alt="Negeri Sembilan" title="Negeri Sembilan" coords="123,233,133,243,140,240,149,238,156,238,160,240,160,232,161,224,156,216,148,212,140,210,131,205,129,219,132,214" shape="poly">
-            <area alt="Melaka" title="Melaka" coords="135,242,139,251,147,255,154,255,156,247,157,240" shape="poly">
-            <area alt="Johor" title="Johor" coords="164,226,156,254,169,266,177,272,185,277,192,281,200,288,206,283,213,283,218,280,228,284,229,275,224,265,221,256,216,246,209,237,179,235" shape="poly">
-            <area alt="Pahang" title="Pahang" coords="113,148,122,184,130,201,142,208,149,210,158,213,166,220,173,226,179,230,184,230,191,231,198,232,196,223,194,211,195,200,194,189,188,178,181,170,171,164,175,155,167,143" shape="poly">
-            <area alt="Kelantan" title="Kelantan" coords="140,77,150,80,154,86,157,96,153,100,150,106,152,114,155,122,155,130,161,136,157,141,150,143,139,142,133,143,124,144,112,146,115,124" shape="poly">
-            <area alt="Terengganu" title="Terengganu" coords="158,93,164,98,171,105,176,108,182,115,185,122,189,131,192,138,194,149,195,159,192,164,190,172,182,169,174,164,172,148,152,115,151,102" shape="poly">
-            <area alt="Sarawak" title="Sarawak" coords="359,200,418,191,467,124,496,149,495,117,506,114,519,138,518,113,528,110,531,171,493,259,458,266,430,258,396,252,391,270,365,278,315,282,290,262,280,234,317,248,330,258,344,250,350,233,348,200" shape="poly">
+            <area alt="Selangor" title="Selangor"  coords="81,181,88,181,101,186,108,187,114,187,122,186,126,190,125,198,129,205,131,212,129,217,124,224,121,233,111,230,104,222,102,206,95,194" shape="poly">
+            <area alt="Negeri Sembilan" title="Negeri Sembilan"  coords="123,233,133,243,140,240,149,238,156,238,160,240,160,232,161,224,156,216,148,212,140,210,131,205,129,219,132,214" shape="poly">
+            <area alt="Melaka" title="Melaka"  coords="135,242,139,251,147,255,154,255,156,247,157,240" shape="poly">
+            <area alt="Johor" title="Johor"  coords="164,226,156,254,169,266,177,272,185,277,192,281,200,288,206,283,213,283,218,280,228,284,229,275,224,265,221,256,216,246,209,237,179,235" shape="poly">
+            <area alt="Pahang" title="Pahang"  coords="113,148,122,184,130,201,142,208,149,210,158,213,166,220,173,226,179,230,184,230,191,231,198,232,196,223,194,211,195,200,194,189,188,178,181,170,171,164,175,155,167,143" shape="poly">
+            <area alt="Kelantan" title="Kelantan"  coords="140,77,150,80,154,86,157,96,153,100,150,106,152,114,155,122,155,130,161,136,157,141,150,143,139,142,133,143,124,144,112,146,115,124" shape="poly">
+            <area alt="Terengganu" title="Terengganu"  coords="158,93,164,98,171,105,176,108,182,115,185,122,189,131,192,138,194,149,195,159,192,164,190,172,182,169,174,164,172,148,152,115,151,102" shape="poly">
+            <area alt="Sarawak" title="Sarawak"  coords="359,200,418,191,467,124,496,149,495,117,506,114,519,138,518,113,528,110,531,171,493,259,458,266,430,258,396,252,391,270,365,278,315,282,290,262,280,234,317,248,330,258,344,250,350,233,348,200" shape="poly">
             <area alt="Sabah" title="Sabah" coords="576,17,553,55,536,82,526,96,527,107,538,138,646,137,687,93,618,64,610,35" shape="poly">
           </map>
         </div>
-
-        <!-- Right: info panel -->
-        <aside class="info-panel" id="infoPanel" aria-live="polite" aria-atomic="true">
-          <div class="info-empty">Click a state on the map to see street-food highlights here.</div>
+           <aside class="info-panel" id="infoPanel" aria-live="polite" aria-atomic="true">
+          <div class="info-empty">Click a state on the map to see street‑food highlights and recommendation location here.</div>
         </aside>
+
       </div>
 
-      <!-- Fallback state list -->
+      <!-- Accessible centered list  -->
       <div class="state-list" aria-label="List of states">
+        <div class="event-card">
         <a>Perlis</a>
+        </div>
+        <div class="event-card">
         <a>Kedah</a>
+        </div>
+        <div class="event-card">
         <a>Penang</a>
+        </div>
+        <div class="event-card">
         <a>Perak</a>
+        </div>
+        <div class="event-card">
         <a>Selangor</a>
+        </div>
+        <div class="event-card">
         <a>Negeri Sembilan</a>
+        </div>
+        <div class="event-card">
         <a>Melaka</a>
+        </div>
+        <div class="event-card">
         <a>Johor</a>
+        </div>
+        <div class="event-card">
         <a>Pahang</a>
+        </div>
+        <div class="event-card">
         <a>Kelantan</a>
+        </div>
+        <div class="event-card">
         <a>Terengganu</a>
+        </div>
+        <div class="event-card">
         <a>Sarawak</a>
+        </div>
+        <div class="event-card">
         <a>Sabah</a>
+        </div>
       </div>
+      </div>
+
+
+
     </section>
   </main>
 
-  <footer>^_^</footer>
+  <footer>© 2025 Malaysian Street Food. All rights reserved.</footer>
 
-  <!-- JS -->
   <script>
   (function () {
     const img   = document.getElementById('msiaMap');
@@ -111,21 +138,21 @@
     if (img.complete) init(); else img.addEventListener('load', init);
     window.addEventListener('resize', rescale);
 
-    /* ===== State data ===== */
+    /* ===== Data for the right panel ===== */
     const stateData = {
       'Penang':   { intro:'Street-food paradise famous for wok hei and bold flavours.', dishes:['Char Kway Teow','Assam Laksa','Hokkien Mee'], link:'https://www.google.com/maps/place/Chulia+Street,+George+Town,+Penang,+Malaysia' },
-      'Kedah':    { intro:'Rice bowl of Malaysia with rustic northern tastes.', dishes:['Laksa Kedah','Gulai Darat','Nasi Ulam'], link:'https://www.google.com/maps/search/food+stalls+Jalan+Putra,+Alor+Setar,+Kedah,+Malaysia' },
-      'Perlis':   { intro:'Smallest state with northern specialities.', dishes:['Laksa Perlis','Peknga'], link:'https://www.google.com/maps/search/Kangar+food+stalls,+Perlis,+Malaysia' },
-      'Perak':    { intro:'Hearty hawker classics and silky tau fu fah from Ipoh.', dishes:['Bean Sprout Chicken','Curry Mee','Tau Fu Fah'], link:'https://www.google.com/maps/search/Ipoh+Old+Town+food+stalls,+Perak,+Malaysia' },
-      'Selangor': { intro:'Greater KL staples and night-market snacks.', dishes:['Satay','Rojak','Yong Tau Foo'], link:'https://www.google.com/maps/search/Kajang+satay+street,+Selangor,+Malaysia' },
-      'Negeri Sembilan': { intro:'Minang flavours—rich, spicy, coconut-based.', dishes:['Masak Lemak Cili Api','Rendang Minang'], link:'https://www.google.com/maps/search/Seremban+food+stalls,+Negeri+Sembilan,+Malaysia' },
-      'Melaka':   { intro:'Peranakan heritage by the riverside.', dishes:['Nyonya Laksa','Chicken Rice Ball','Satay Celup'], link:'https://www.google.com/maps/search/Klebang+Coconut+Shake,+Melaka,+Malaysia' },
-      'Johor':    { intro:'Southern favourites with unique noodles.', dishes:['oyster omelette','Laksa Johor','Otak-Otak'], link:'https://www.google.com/maps/search/food+street+Meldrum+Walk,+Johor+Bahru,+Malaysia' },
-      'Pahang':   { intro:'Mountains, coasts, and smoky grills.', dishes:['Ikan Patin Tempoyak','Satar','Gulai Kawah'], link:'https://www.google.com/maps/search/Kuantan+food+stalls+Teluk+Cempedak,+Pahang,+Malaysia' },
-      'Kelantan': { intro:'Sweet-leaning East Coast treats.', dishes:['Nasi Kerabu','Nasi Dagang (Kelantan)','Akok'], link:'https://www.google.com/maps/search/Wakaf+Che+Yeh+night+market,+Kelantan,+Malaysia' },
-      'Terengganu':{ intro:'Seafood bites & deep-fried favourites.', dishes:['Keropok Lekor','Satar','Nasi Dagang (TGG)'], link:'https://www.google.com/maps/search/Warung+Pok+Nong,+Kuala+Terengganu,+Terengganu,+Malaysia' },
-      'Sarawak':  { intro:'Borneo flavours and smoky noodles.', dishes:['Kolo Mee','Laksa Sarawak','Manok Pansoh'], link:'https://www.google.com/maps/search/Siniawan+Night+Market,+Sarawak,+Malaysia' },
-      'Sabah':    { intro:'Seafood-forward dishes and hinava.', dishes:['Ngiu Chap','Hinava','Tuaran Mee'], link:'https://www.google.com/maps/search/Api-Api+Night+Food+Market,+Kota+Kinabalu,+Sabah,+Malaysia' }
+      'Kedah':    { intro:'Rice bowl of Malaysia with rustic northern tastes.',        dishes:['Laksa Kedah','Gulai Darat','Nasi Ulam'], link:'https://www.google.com/maps/search/food+stalls+Jalan+Putra,+Alor+Setar,+Kedah,+Malaysia' },
+      'Perlis':   { intro:'Smallest state with northern specialities.',                 dishes:['Laksa Perlis','Peknga'], link:'https://www.google.com/maps/search/Kangar+food+stalls,+Perlis,+Malaysia' },
+      'Perak':    { intro:'Hearty hawker classics and silky tau fu fah from Ipoh.',     dishes:['Bean Sprout Chicken','Curry Mee','Tau Fu Fah'], link:'https://www.google.com/maps/search/Ipoh+Old+Town+food+stalls,+Perak,+Malaysia' },
+      'Selangor': { intro:'Greater KL staples and night‑market snacks.',                dishes:['Satay','Rojak','Yong Tau Foo'], link:'https://www.google.com/maps/search/Kajang+satay+street,+Selangor,+Malaysia' },
+      'Negeri Sembilan': { intro:'Minang flavours—rich, spicy, coconut‑based.',        dishes:['Masak Lemak Cili Api','Rendang Minang'], link:'https://www.google.com/maps/search/Seremban+food+stalls,+Negeri+Sembilan,+Malaysia' },
+      'Melaka':   { intro:'Peranakan heritage by the riverside.',                        dishes:['Nyonya Laksa','Chicken Rice Ball','Satay Celup'], link:'https://www.google.com/maps/search/Klebang+Coconut+Shake,+Melaka,+Malaysia' },
+      'Johor':    { intro:'Southern favourites with unique noodles.',                    dishes:['oyster omelette','Laksa Johor','Otak‑Otak'], link:'https://www.google.com/maps/search/food+street+Meldrum+Walk,+Johor+Bahru,+Malaysia' },
+      'Pahang':   { intro:'Mountains, coasts, and smoky grills.',                        dishes:['Ikan Patin Tempoyak','Satar','Gulai Kawah'], link:'https://www.google.com/maps/search/Kuantan+food+stalls+Teluk+Cempedak,+Pahang,+Malaysia' },
+      'Kelantan': { intro:'Sweet‑leaning East Coast treats.',                            dishes:['Nasi Kerabu','Nasi Dagang (Kelantan)','Akok'], link:'https://www.google.com/maps/search/Wakaf+Che+Yeh+night+market,+Kelantan,+Malaysia' },
+      'Terengganu':{ intro:'Seafood bites & deep‑fried favourites.',                     dishes:['Keropok Lekor','Satar','Nasi Dagang (TGG)'], link:'https://www.google.com/maps/search/Warung+Pok+Nong,+Kuala+Terengganu,+Terengganu,+Malaysia' },
+      'Sarawak':  { intro:'Borneo flavours and smoky noodles.',                          dishes:['Kolo Mee','Laksa Sarawak','Manok Pansoh'], link:'https://www.google.com/maps/search/Siniawan+Night+Market,+Sarawak,+Malaysia' },
+      'Sabah':    { intro:'Seafood‑forward dishes and hinava.',                          dishes:['Ngiu Chap','Hinava','Tuaran Mee'], link:'https://www.google.com/maps/search/Api-Api+Night+Food+Market,+Kota+Kinabalu,+Sabah,+Malaysia' }
     };
 
     function renderPanel(name) {
@@ -138,7 +165,7 @@
         <h3>${name}</h3>
         <p>${data.intro}</p>
         <div>${data.dishes.map(d => `<span class="badge">${d}</span>`).join('')}</div>
-        <p style="margin-top:10px;"><a href="${data.link}" target="_blank">Open map location →</a></p>
+        <p style="margin-top:10px;"><a href="${data.link}">Open map location →</a></p>
       `;
     }
 
@@ -151,7 +178,8 @@
     }
     function showLastViewed() {
       const n = sessionStorage.getItem('lastStateName');
-      if (n && lastViewedBox) {
+      const u = sessionStorage.getItem('lastStateURL');
+      if (n && u && lastViewedBox) {
         lastViewedBox.innerHTML = `Last viewed state: <strong>${n}</strong>`;
         lastViewedBox.style.display = 'block';
         renderPanel(n); 
@@ -159,12 +187,13 @@
     }
     showLastViewed();
 
-    /* ===== Wire clicks ===== */
+    /* ===== Wire clicks: image-map + fallback list ===== */
     map.addEventListener('click', function(e){
       if (e.target.tagName !== 'AREA') return;
       e.preventDefault(); 
       const name = e.target.alt || e.target.title || '';
-      saveLastState(name, '#');
+      const url  = e.target.getAttribute('href') || '#';
+      saveLastState(name, url);
       renderPanel(name);
       showLastViewed();
     });
@@ -176,7 +205,8 @@
         if (!a) return;
         e.preventDefault();
         const name = a.textContent.trim();
-        saveLastState(name, '#');
+        const url  = a.getAttribute('href') || '#';
+        saveLastState(name, url);
         renderPanel(name);
         showLastViewed();
       });
