@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FAQ - Malaysian Street Food</title>
+  <title>FAQ • Malaysian Street Food</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Navbar -->
+  <!-- ==================== NAVBAR ==================== -->
   <nav>
     <ul>
       <li><a href="index.html">Home</a></li>
@@ -23,12 +23,14 @@
     </ul>
   </nav>
 
+  <!-- ==================== MAIN CONTENT ==================== -->
   <main class="section">
     <h1>Frequently Asked Questions</h1>
     <div class="underline"></div>
 
     <div class="faq-container">
-      <!-- FAQ 1 -->
+
+      <!-- FAQ Item Template -->
       <div class="faq-item">
         <button class="faq-question">1. What types of street food do you feature? <span class="icon">+</span></button>
         <div class="faq-answer">
@@ -36,7 +38,6 @@
         </div>
       </div>
 
-      <!-- FAQ 2 -->
       <div class="faq-item">
         <button class="faq-question">2. Where do you get your information? <span class="icon">+</span></button>
         <div class="faq-answer">
@@ -44,7 +45,6 @@
         </div>
       </div>
 
-      <!-- FAQ 3 -->
       <div class="faq-item">
         <button class="faq-question">3. How often is the website updated? <span class="icon">+</span></button>
         <div class="faq-answer">
@@ -52,7 +52,6 @@
         </div>
       </div>
 
-      <!-- FAQ 4 -->
       <div class="faq-item">
         <button class="faq-question">4. Do you provide a street food map? <span class="icon">+</span></button>
         <div class="faq-answer">
@@ -60,7 +59,6 @@
         </div>
       </div>
 
-      <!-- FAQ 5 -->
       <div class="faq-item">
         <button class="faq-question">5. Can I suggest or submit a street food recommendation? <span class="icon">+</span></button>
         <div class="faq-answer">
@@ -68,7 +66,6 @@
         </div>
       </div>
 
-      <!-- FAQ 6 -->
       <div class="faq-item">
         <button class="faq-question">6. Do you provide street food reviews or ratings? <span class="icon">+</span></button>
         <div class="faq-answer">
@@ -76,7 +73,6 @@
         </div>
       </div>
 
-      <!-- FAQ 7 -->
       <div class="faq-item">
         <button class="faq-question">7. Are your food guides free to access? <span class="icon">+</span></button>
         <div class="faq-answer">
@@ -84,30 +80,31 @@
         </div>
       </div>
 
-      <!-- FAQ 8 -->
       <div class="faq-item">
         <button class="faq-question">8. Do you only feature street food from certain countries? <span class="icon">+</span></button>
         <div class="faq-answer">
-          <p>Yes, our website focuses on Malaysian street food, focusing on local specialties.</p>
+          <p>Yes, our website focuses on Malaysian street food, highlighting local specialties.</p>
         </div>
       </div>
 
-      <!-- FAQ 9 -->
       <div class="faq-item">
         <button class="faq-question">9. Can I use your photos for my own blog or project? <span class="icon">+</span></button>
         <div class="faq-answer">
           <p>You may use our photos only with prior permission and proper credit to Malaysian Street Food. Please <a href="contact.html">Contact</a> us for details.</p>
         </div>
       </div>
+
     </div>
   </main>
 
+  <!-- ==================== FOOTER ==================== -->
   <footer>
     <p>© 2025 Malaysian Street Food. All rights reserved.</p>
   </footer>
 
+  <!-- ==================== FAQ SCRIPT ==================== -->
   <script>
-    // Accordion toggle
+    // Accordion toggle functionality
     document.querySelectorAll('.faq-question').forEach(button => {
       button.addEventListener('click', () => {
         const faqItem = button.parentElement;
@@ -115,5 +112,6 @@
       });
     });
   </script>
+
 </body>
 </html>

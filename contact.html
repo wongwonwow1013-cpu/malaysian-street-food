@@ -1,241 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!--
-    File: contact.html  |  Street Food Website
-    Functionality Declaration (for presentation):
-    • Purpose: Provide a contact/help center with a working form and social share.
-    • Tech Used: HTML5, CSS3, Bootstrap 5.x, jQuery 3.x.
-    • Storage: cookies (preferred contact channel), sessionStorage (form autosave), localStorage (message log).
-    • REST API: jQuery POST to JSONPlaceholder (mock API) to demonstrate AJAX form submit.
-    • Media: HTML5 <video> hero (royalty-free MP4) to avoid YouTube “unavailable” restrictions.
-    • UX/UI: Mobile-first layout, validation, spinner feedback.
-    • Removed per request: “Find us” map, “Office” details, entire FAQ section.
-  -->
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Street Food — Contact Us</title>
-
-  <!-- Bootstrap & jQuery -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - Malaysian Street Food</title>
+  <link rel="stylesheet" href="style.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-  <style>
-    :root { --brand:#ff6b35; }
-    .hero {
-      background: radial-gradient(1200px 400px at 10% 10%, rgba(255,107,53,.18), transparent), #f8f9fa;
-    }
-    .wobble { animation: wob 6s ease-in-out infinite; }
-    @keyframes wob { 0%,100%{transform:rotate(0)} 50%{transform:rotate(1deg)} }
-    .required::after{ content:" *"; color:#dc3545 }
-  </style>
 </head>
-<body>
-  <!-- Navbar -->
-<nav class="msf-navbar" role="navigation" aria-label="Main">
-  <ul class="msf-nav">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="dishes.html">Dishes</a></li>
-    <li><a href="featured.html">Featured</a></li>
-    <li><a href="gallery.html">Gallery</a></li>
-    <li><a href="location.html">Locations</a></li>
-    <li><a href="reviews.html">Reviews</a></li>
-    <li><a class="active" href="contact.html">Contact</a></li>
-    <li><a href="about.html">About Us</a></li>
-    <li><a href="faq.html">FAQ</a></li>
-    <li><a href="events.html">Events</a></li>
-  </ul>
-</nav>
+<body class="contact-page">
 
-<style>
-  /* --- top nav --- */
-  .msf-navbar{
-    position: fixed; top: 0; left: 0; right: 0;
-    background: #f1872d;          /* orange bar */
-    z-index: 1100;
-    box-shadow: 0 1px 0 rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.06);
-  }
-  .msf-nav{
-    list-style: none;
-    margin: 0; padding: .65rem 1.25rem;
-    display: flex; gap: .25rem;
-    justify-content: center; flex-wrap: wrap;
-  }
-  .msf-nav > li{ display: inline-flex; }
-  .msf-nav a{
-    display: block;
-    text-decoration: none;
-    color: #fff; font-weight: 600;
-    padding: .45rem .9rem; line-height: 1;
-    border-radius: .3rem;
-  }
-  .msf-nav a:hover, .msf-nav a:focus{
-    background: rgba(255,255,255,.16);
-    outline: none;
-  }
-  .msf-nav a.active{
-    background: rgba(255,255,255,.28); /* highlighted tab */
-  }
-  /* keep page content below the fixed bar */
-  body{ padding-top: 64px; }
+  <!-- ===================== NAVBAR ===================== -->
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dishes.html">Dishes</a></li>
+      <li><a href="featured.html">Featured</a></li>
+      <li><a href="location.html">Locations</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="events.html">Events</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
+      <li><a class="active" href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
 
-  /* small screens: allow sideways scroll if needed */
-  @media (max-width: 576px){
-    .msf-nav{ overflow-x: auto; white-space: nowrap; }
-  }
-</style>
+  <!-- ===================== MAIN CONTENT ===================== -->
+  <main>
+    <div class="contact-card">
+      <h2>Contact Us</h2>
 
-  <!-- Hero (video + contact form) -->
-  <header class="hero py-5">
-    <div class="container">
-      <div class="row align-items-center g-4">
-        <div class="col-lg-6">
-          <h1 class="display-6 fw-bold">We’re here to help 🍜</h1>
-          <p class="lead">Questions, collaborations, or stall submissions? Drop us a note and we’ll get back soon.</p>
+      <form id="contactForm">
+        <!-- Full Name -->
+        <label class="required">Full Name</label>
+        <input type="text" id="name" maxlength="60" placeholder="e.g., Nur Aisyah" required>
 
-          <!-- Robust, auto-fallback video -->
-          <div class="ratio ratio-16x9 shadow wobble rounded overflow-hidden">
-            <video id="contactVideo"
-                   controls
-                   playsinline
-                   preload="metadata"
-                   poster="https://images.unsplash.com/photo-1481833761820-0509d3217039?q=80&w=1200&auto=format&fit=crop"
-                   crossorigin="anonymous"></video>
-          </div>
-          <div class="form-text mt-2">Video: coverr.co (street food b-roll)</div>
+        <!-- Email -->
+        <label class="required">Email</label>
+        <input type="email" id="email" placeholder="you@example.com" required>
+
+        <!-- Preferred Contact Method -->
+        <label>Preferred Contact</label>
+        <select id="channel">
+          <option>Email</option>
+          <option>WhatsApp</option>
+          <option>Telegram</option>
+        </select>
+
+        <!-- Message -->
+        <label class="required">Message</label>
+        <textarea id="message" rows="4" maxlength="500" placeholder="Tell us how we can help…" required></textarea>
+
+        <!-- Buttons -->
+        <div class="form-buttons">
+          <button type="submit" class="btn-primary">Send</button>
+          <button type="button" class="btn-secondary" id="btnClear">Clear</button>
         </div>
-
-        <div class="col-lg-6">
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <h2 class="h4">Contact Form</h2>
-              <form id="contactForm" novalidate>
-                <div class="row g-3">
-                  <div class="col-md-6">
-                    <label for="name" class="form-label required">Full Name</label>
-                    <input id="name" class="form-control" required maxlength="60" placeholder="e.g., Nur Aisyah">
-                    <div class="invalid-feedback">Please enter your name.</div>
-                  </div>
-                  <div class="col-md-6">
-                    <label for="email" class="form-label required">Email</label>
-                    <input id="email" type="email" class="form-control" required placeholder="you@example.com">
-                    <div class="invalid-feedback">Enter a valid email.</div>
-                  </div>
-                  <div class="col-12">
-                    <label for="channel" class="form-label">Preferred Contact</label>
-                    <select id="channel" class="form-select">
-                      <option>Email</option>
-                      <option>WhatsApp</option>
-                      <option>Telegram</option>
-                    </select>
-                    <div class="form-text">Saved in a cookie for next visit.</div>
-                  </div>
-                  <div class="col-12">
-                    <label for="message" class="form-label required">Message</label>
-                    <textarea id="message" class="form-control" rows="4" required maxlength="500" placeholder="Tell us how we can help…"></textarea>
-                    <div class="invalid-feedback">Please write a message.</div>
-                  </div>
-                  <div class="col-12 d-flex align-items-center gap-2">
-                    <button id="btnSend" class="btn btn-primary" type="submit">
-                      <span class="spinner-border spinner-border-sm me-1 d-none" id="spinner" role="status" aria-hidden="true"></span>
-                      Send Message
-                    </button>
-                    <button class="btn btn-outline-secondary" type="button" id="btnClear">Clear</button>
-                  </div>
-                  <small class="text-muted">Autosave: Your draft is stored in <strong>sessionStorage</strong>. Successfully sent messages are logged in <strong>localStorage</strong>.</small>
-                </div>
-              </form>
-              <div class="alert alert-success mt-3 d-none" id="successBox" role="alert">✅ Message sent! (demo via JSONPlaceholder API)</div>
-              <div class="alert alert-danger mt-3 d-none" id="errorBox" role="alert">❌ Something went wrong. Please try again.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Share section -->
-      <div id="share" class="mt-5">
-        <h2 class="h5">Share Street Food love</h2>
-        <div class="d-flex gap-2">
-          <a class="btn btn-outline-primary" target="_blank" rel="noopener"
-             href="https://twitter.com/intent/tweet?text=Check%20out%20this%20Street%20Food%20site!&url=https://example.com">Share on X</a>
-          <a class="btn btn-outline-danger" target="_blank" rel="noopener"
-             href="https://www.youtube.com/results?search_query=street+food">More on YouTube</a>
-        </div>
-      </div>
+      </form>
     </div>
-  </header>
+  </main>
 
-  <footer class="py-5 bg-light">
-    <div class="container text-center">
-      <small class="text-muted">© 2025 Street Food — Contact Page</small>
-    </div>
+  <!-- ===================== FOOTER ===================== -->
+  <footer>
+    <p>© 2025 Malaysian Street Food. All rights reserved.</p>
   </footer>
 
-  <script>
-    /* Cookie helpers */
-    function setCookie(name, value, days=120){
-      const d = new Date(); d.setTime(d.getTime() + days*24*60*60*1000);
-      document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/;SameSite=Lax`;
-    }
-    function getCookie(name){
-      const match = document.cookie.match(new RegExp('(^| )'+name+'=([^;]+)'));
-      return match ? decodeURIComponent(match[2]) : null;
-    }
+  <!-- ===================== TOAST NOTIFICATION ===================== -->
+  <div id="toast" class="toast">Message sent!</div>
 
+  <!-- ===================== JAVASCRIPT ===================== -->
+  <script>
     $(function(){
+
+      // -------------------- Form Draft Autosave --------------------
       const fields = ['name','email','message'];
 
-      /* =========================
-         Hero video auto-fallback
-         ========================= */
-      (function setupContactVideo(){
-        const SOURCES = [
-          'https://cdn.coverr.co/videos/coverr-street-food-4842/1080p.mp4',
-          'https://cdn.pixabay.com/video/2021/06/10/75160-560258677_large.mp4',
-          'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4'
-        ];
-        const v = document.getElementById('contactVideo');
-        let i = 0;
-        function tryNext() {
-          if (i >= SOURCES.length) return;
-          v.src = SOURCES[i++];
-          v.load();
-        }
-        v.addEventListener('error', tryNext, { passive: true });
-        v.addEventListener('stalled', () => setTimeout(tryNext, 1200), { passive: true });
-        tryNext();
-      })();
+      fields.forEach(id => {
+        const value = sessionStorage.getItem('contact_' + id);
+        if(value) $('#' + id).val(value);
 
-      // Load cookie for preferred channel
-      const savedChannel = getCookie('pref_channel');
-      if(savedChannel) $('#channel').val(savedChannel);
-      $('#channel').on('change', function(){ setCookie('pref_channel', this.value); });
-
-      // Autosave draft (sessionStorage)
-      fields.forEach(id=>{
-        const v = sessionStorage.getItem('contact_'+id);
-        if(v) $('#'+id).val(v);
-        $('#'+id).on('input', function(){ sessionStorage.setItem('contact_'+id, this.value); });
+        $('#' + id).on('input', function(){
+          sessionStorage.setItem('contact_' + id, this.value);
+        });
       });
 
-      // Clear form
+      // -------------------- Clear Form --------------------
       $('#btnClear').on('click', function(){
         $('#contactForm')[0].reset();
-        fields.forEach(id=>sessionStorage.removeItem('contact_'+id));
+        fields.forEach(id => sessionStorage.removeItem('contact_' + id));
       });
 
-      // Submit via REST API (JSONPlaceholder)
+      // -------------------- Submit Form --------------------
       $('#contactForm').on('submit', function(e){
         e.preventDefault();
-        const form = this;
-        form.classList.add('was-validated');
-        if(!form.checkValidity()) return;
-
-        $('#spinner').removeClass('d-none');
-        $('#btnSend').prop('disabled', true);
-        $('#successBox').addClass('d-none');
-        $('#errorBox').addClass('d-none');
 
         const payload = {
           name: $('#name').val().trim(),
@@ -245,37 +101,27 @@
           time: new Date().toISOString()
         };
 
-        $.ajax({
-          url: 'https://jsonplaceholder.typicode.com/posts',
-          method: 'POST',
-          contentType: 'application/json; charset=UTF-8',
-          data: JSON.stringify(payload),
-          success: (res)=>{
-            $('#spinner').addClass('d-none');
-            $('#btnSend').prop('disabled', false);
-            $('#successBox').removeClass('d-none');
+        // Validate required fields
+        if(!payload.name || !payload.email || !payload.message){
+          alert("Please fill all required fields");
+          return;
+        }
 
-            // Log successful submission in localStorage
-            const log = JSON.parse(localStorage.getItem('messages_log')||'[]');
-            log.push({ id: res.id, ...payload });
-            localStorage.setItem('messages_log', JSON.stringify(log));
+        // Save message in localStorage
+        const log = JSON.parse(localStorage.getItem('messages_log') || '[]');
+        log.push(payload);
+        localStorage.setItem('messages_log', JSON.stringify(log));
 
-            // Clear draft
-            fields.forEach(id=>sessionStorage.removeItem('contact_'+id));
-            form.reset();
+        // Clear draft & reset form
+        fields.forEach(id => sessionStorage.removeItem('contact_' + id));
+        this.reset();
 
-            // Remove Bootstrap validation styles
-            form.classList.remove('was-validated');
-
-          },
-          error: ()=>{
-            $('#spinner').addClass('d-none');
-            $('#btnSend').prop('disabled', false);
-            $('#errorBox').removeClass('d-none');
-          }
-        });
+        // Show toast notification
+        $('#toast').fadeIn().delay(1500).fadeOut();
       });
+
     });
   </script>
+
 </body>
 </html>
