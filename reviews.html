@@ -1,407 +1,650 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Street Food Website - Reviews</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <!--
+    File: review.html  |  Street Food Website
+    Purpose: Reviews only (API section removed)
+    Tech: HTML5, CSS3, JS (ES6), jQuery 3.x, Bootstrap 5.x
+    Storage: localStorage (reviews), sessionStorage (form draft), cookies (theme + consent)
+    Media: <video> intro, <audio> “success chime” on save, image preview (FileReader)
+    Limits: 100KB max image upload per review
+    UX: Mobile-first layout, toasts/modals, lightbox for images, quick-search chips (removed)
+    Accessibility: Labels/aria attributes, required fields, keyboard focus styles
+  -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Street Food — Reviews</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 
+  <!-- Bootstrap & jQuery (CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    :root { --brand:#ff6b35; --accent:#ffd166; }
+    body[data-theme="dark"] { background:#111; color:#f4f4f4; }
+    .brand-gradient { background: linear-gradient(135deg, var(--brand), #f3722c); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .floating { animation: floatY 3s ease-in-out infinite; }
+    @keyframes floatY { 0%, 100%{ transform: translateY(0) } 50%{ transform: translateY(-6px) } }
+    .star { cursor: pointer; font-size: 1.25rem; color: #ccc; transition: transform .1s ease; }
+    .star.active { color: #f5a623; transform: scale(1.1); }
+    .review-card:hover { box-shadow: 0 10px 24px rgba(0,0,0,.12); transform: translateY(-2px); transition: .2s; }
+    .thumb { width: 64px; height: 64px; object-fit: cover; border-radius: .5rem; cursor: zoom-in; }
+    .pill { background: var(--accent); color: #222; border-radius: 999px; padding: .15rem .6rem; font-size: .8rem; }
+    .required::after{ content:" *"; color:#dc3545 }
+    .video-wrap { border-radius: 1rem; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,.15); }
+    #cookieBar { position: fixed; bottom: 1rem; left: 1rem; right: 1rem; z-index: 1030; }
+  </style>
 </head>
-<body class="bg-orange-30">
+<body>
+  <!-- Cookie Consent + Theme via Cookies -->
+  <div id="cookieBar" class="alert alert-dark d-none shadow-lg" role="alert" aria-live="polite">
+    🍪 We use cookies to remember your theme and improve your experience.
+    <button id="acceptCookies" class="btn btn-primary btn-sm ms-2">Accept</button>
+    <button id="declineCookies" class="btn btn-outline-secondary btn-sm ms-1">Decline</button>
+  </div>
 
-  <!-- Unified Navbar from first code -->
-  <nav>
-    <ul>
+  <!-- Navbar -->
+  <nav class="msf-navbar" role="navigation" aria-label="Main">
+    <ul class="msf-nav">
       <li><a href="index.html">Home</a></li>
       <li><a href="dishes.html">Dishes</a></li>
       <li><a href="featured.html">Featured</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
       <li><a href="location.html">Locations</a></li>
+      <li><a class="active" href="reviews.html">Reviews</a></li>
+      <li><a href="contact.html">Contact</a></li>
       <li><a href="about.html">About Us</a></li>
       <li><a href="faq.html">FAQ</a></li>
       <li><a href="events.html">Events</a></li>
-      <li><a class="active" href="reviews.html">Reviews</a></li>
-      <li><a href="contact.html">Contact</a></li>
     </ul>
-    
   </nav>
 
-  <!-- Reviews Page -->
-  <main class="pt-10 p-4">
-    <div id="allReviewsPage" class="max-w-6xl mx-auto">
-      <h2 class="text-xl font-bold mb-4">All Reviews</h2>
-      <div id="reviewsContainer" class="space-y-4 flex flex-col items-center"></div>
-    </div>
+  <style>
+    /* --- top nav --- */
+    .msf-navbar{
+      position: fixed; top: 0; left: 0; right: 0;
+      background: #f1872d;          /* orange bar */
+      z-index: 1100;
+      box-shadow: 0 1px 0 rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.06);
+    }
+    .msf-nav{
+      list-style: none;
+      margin: 0; padding: .65rem 1.25rem;
+      display: flex; gap: .25rem;
+      justify-content: center; flex-wrap: wrap;
+    }
+    .msf-nav > li{ display: inline-flex; }
+    .msf-nav a{
+      display: block;
+      text-decoration: none;
+      color: #fff; font-weight: 600;
+      padding: .45rem .9rem; line-height: 1;
+      border-radius: .3rem;
+    }
+    .msf-nav a:hover, .msf-nav a:focus{
+      background: rgba(255,255,255,.16);
+      outline: none;
+    }
+    .msf-nav a.active{
+      background: rgba(255,255,255,.28); /* highlighted tab */
+    }
+    /* keep page content below the fixed bar */
+    body{ padding-top: 64px; }
 
-    <!-- Floating Create Review Button -->
-    <a id="fab" href="#/create" title="Create a review"
-      class="group fixed bottom-6 right-6 flex items-center justify-center rounded-full bg-orange-500 text-white shadow-xl transition-all duration-300 overflow-hidden"
-      onclick="showCreatePage(true)">
-      <!-- Pencil Icon -->
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-        class="w-6 h-6 m-4 flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
-        <path d="M21.731 2.269a2.625 2.625 0 0 0-3.714 0l-1.157 1.157 
-                3.714 3.714 1.157-1.157a2.625 2.625 0 0 0 0-3.714z"/>
-        <path d="M3 17.25V21h3.75l11.03-11.03-3.75-3.75L3 17.25z"/>
-      </svg>
-      <!-- Expanding Label -->
-      <span class="whitespace-nowrap opacity-0 max-w-0 group-hover:opacity-100 group-hover:max-w-xs transition-all duration-300 pr-4 font-medium">
-        Create a new review
-      </span>
-    </a>
+    @media (max-width: 576px){
+      .msf-nav{ overflow-x: auto; white-space: nowrap; }
+    }
+  </style>
 
-    <!-- Create/Edit Form -->
-    <div id="createReviewPage" class="hidden pt-10 p-4 max-w-6xl mx-auto">
-      <h2 class="text-xl font-bold mb-4">Create/Edit Review</h2>
-      <form id="reviewForm" class="space-y-4">
-        <input type="text" id="userName" placeholder="Your Name" class="w-full border p-2 rounded" required />
-        <input type="text" id="restaurantName" placeholder="Restaurant/Stall Name" class="w-full border p-2 rounded" required />
-        <input type="text" id="foodName" placeholder="e.g., Nasi Lemak, Roti Canai" class="w-full border p-2 rounded" required />
-        <textarea id="fullAddress" placeholder="Full Address" class="w-full border p-2 rounded" required></textarea>
-        <button type="button" onclick="getLocation()" class="bg-blue-500 text-white px-4 py-2 rounded">Use My Location</button>
-        <div id="map"></div>
-        <textarea id="comment" placeholder="Write a comment..." class="w-full border p-2 rounded"></textarea>
-        <div id="starRating" class="flex gap-1">
-          <span class="star gray" data-value="1">★</span>
-          <span class="star gray" data-value="2">★</span>
-          <span class="star gray" data-value="3">★</span>
-          <span class="star gray" data-value="4">★</span>
-          <span class="star gray" data-value="5">★</span>
+  <!-- Header -->
+  <header class="py-5 bg-light">
+    <div class="container">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-6">
+          <h1 class="display-5 fw-bold">Share Your <span class="brand-gradient">Street Food</span> Experience</h1>
+          <p class="lead mb-3">Rate stalls, upload a photo, and help others discover the best eats near you.</p>
+          <div class="d-flex gap-2">
+            <a href="#reviewForm" class="btn btn-primary">Write a Review</a>
+            <!-- Keep two buttons for same layout; link to reviews instead of removed API section -->
+            <a href="#reviews" class="btn btn-outline-secondary">Browse Reviews</a>
+          </div>
         </div>
-        <input type="file" id="mediaUpload" multiple accept="image/*,video/*" class="w-full" />
-        <div id="mediaPreview" class="media-preview"></div>
-        <p id="mediaCounter" class="text-sm text-gray-600 mt-1"></p>
-        <p id="mediaLimitWarning" class="text-red-600 text-sm mt-1 hidden">Media limit reached: Max 5 images, 2 videos</p>
-        <button onclick="showAllReviews()" class="mt-4 bg-orange-500 text-white px-4 py-2 rounded" type="button">⬅ Back to Reviews</button>
-        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Submit Review</button>
-        <p id="createdDateDisplay" class="text-sm text-gray-400"></p>
-        <p id="updatedDateDisplay" class="text-sm text-gray-600 italic"></p>
-      </form>
+        <div class="col-lg-6">
+          <div class="video-wrap floating">
+            <!-- Robust, auto-fallback video (sources injected by JS) -->
+            <video id="heroVideo"
+                   controls
+                   playsinline
+                   preload="metadata"
+                   width="100%"
+                   poster="https://images.unsplash.com/photo-1481833761820-0509d3217039?q=80&w=1200&auto=format&fit=crop"
+                   crossorigin="anonymous"></video>
+          </div>
+          <div class="form-text text-center mt-2">Video: coverr.co (street food b-roll)</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Review Form -->
+  <main class="container my-5">
+    <div class="row g-4">
+      <section id="reviewForm" class="col-lg-5">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h2 class="h4 mb-3">Write a Review</h2>
+            <form id="formReview" novalidate>
+              <div class="mb-3">
+                <label for="stallName" class="form-label required">Restaurant / Stall Name</label>
+                <input id="stallName" class="form-control" required maxlength="60" placeholder="e.g., Ali Nasi Lemak">
+                <div class="invalid-feedback">Please provide the restaurant/stall name.</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="foodName" class="form-label required">Food / Dish Name</label>
+                <input id="foodName" class="form-control" required maxlength="60" placeholder="e.g., Nasi Lemak">
+                <div class="invalid-feedback">Please provide the food or dish name.</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="location" class="form-label required">Location</label>
+                <input id="location" class="form-control" required maxlength="80" placeholder="e.g., Jalan Alor, KL">
+                <div class="invalid-feedback">Please provide a location.</div>
+              </div>
+
+              <div class="mb-3">
+                <span class="form-label d-block required">Rating</span>
+                <div id="rating" class="d-flex gap-1" role="radiogroup" aria-label="Star rating">
+                  <span class="star" data-val="1" aria-label="1 star">★</span>
+                  <span class="star" data-val="2" aria-label="2 stars">★</span>
+                  <span class="star" data-val="3" aria-label="3 stars">★</span>
+                  <span class="star" data-val="4" aria-label="4 stars">★</span>
+                  <span class="star" data-val="5" aria-label="5 stars">★</span>
+                </div>
+                <input type="hidden" id="ratingVal" value="0" required>
+                <div class="form-text">Tap a star to rate.</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="reviewText" class="form-label required">Your Review</label>
+                <textarea id="reviewText" class="form-control" rows="4" required maxlength="400" placeholder="Taste, price, queue time, hygiene, must-try items..."></textarea>
+                <div class="invalid-feedback">Please write a short review.</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="photo" class="form-label">Media (Image, max 100KB)</label>
+                <input id="photo" type="file" accept="image/*" class="form-control" data-max-bytes="102400">
+                <div class="form-text">Maximum file size: <strong>100 KB</strong>. Larger files will be rejected.</div>
+                <img id="preview" class="mt-2 d-none rounded" alt="preview" width="120" height="120" />
+              </div>
+
+              <div class="d-flex gap-2">
+                <button class="btn btn-primary" type="submit">Save Review</button>
+                <button class="btn btn-outline-secondary" id="btnClear" type="button">Clear</button>
+              </div>
+            </form>
+            <audio id="chime" preload="auto">
+              <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_d3a3b1b5b4.mp3" type="audio/mpeg">
+            </audio>
+            <hr>
+            <small class="text-muted">Data policy: Reviews are stored in your browser’s <strong>localStorage</strong>. Draft text is kept in <strong>sessionStorage</strong> until you submit.</small>
+          </div>
+        </div>
+      </section>
+
+      <!-- Reviews List -->
+      <section class="col-lg-7">
+        <div class="d-flex align-items-center justify-content-between">
+          <h2 class="h4 mb-0">Recent Reviews</h2>
+          <div class="btn-group">
+            <button id="sortNewest" class="btn btn-sm btn-outline-secondary">Newest</button>
+            <button id="sortRating" class="btn btn-sm btn-outline-secondary">Top Rated</button>
+          </div>
+        </div>
+        <div id="reviews" class="mt-3 row g-3"></div>
+      </section>
     </div>
   </main>
 
-  <!-- Lightbox Overlay -->
-  <div id="lightboxOverlay">
-    <button class="closeBtn">✖</button>
-    <button class="arrow left">◀</button>
-    <div id="lightboxContent"></div>
-    <button class="arrow right">▶</button>
+  <!-- FULL Edit Modal -->
+  <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <form id="formEditFull" class="modal-content" novalidate>
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Review</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" id="editId">
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="editStall" class="form-label required">Restaurant / Stall Name</label>
+              <input id="editStall" class="form-control" required maxlength="60">
+              <div class="invalid-feedback">Please provide the restaurant/stall name.</div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="editFood" class="form-label required">Food / Dish Name</label>
+              <input id="editFood" class="form-control" required maxlength="60">
+              <div class="invalid-feedback">Please provide the food or dish name.</div>
+            </div>
+
+            <div class="col-12">
+              <label for="editLoc" class="form-label required">Location</label>
+              <input id="editLoc" class="form-control" required maxlength="80">
+              <div class="invalid-feedback">Please provide a location.</div>
+            </div>
+
+            <div class="col-12">
+              <span class="form-label d-block required">Rating</span>
+              <div id="editRating" class="d-flex gap-1" role="radiogroup" aria-label="Star rating (edit)">
+                <span class="star" data-val="1" aria-label="1 star">★</span>
+                <span class="star" data-val="2" aria-label="2 stars">★</span>
+                <span class="star" data-val="3" aria-label="3 stars">★</span>
+                <span class="star" data-val="4" aria-label="4 stars">★</span>
+                <span class="star" data-val="5" aria-label="5 stars">★</span>
+              </div>
+              <input type="hidden" id="editRatingVal" value="0" required>
+              <div class="form-text">Tap a star to rate.</div>
+            </div>
+
+            <div class="col-12">
+              <label for="editText" class="form-label required">Your Review</label>
+              <textarea id="editText" class="form-control" rows="4" required maxlength="400"></textarea>
+              <div class="invalid-feedback">Please write a short review.</div>
+            </div>
+
+            <div class="col-12">
+              <label for="editPhoto" class="form-label">Media (Image, max 100KB)</label>
+              <input id="editPhoto" type="file" accept="image/*" class="form-control" data-max-bytes="102400">
+              <div class="form-text">Maximum file size: <strong>100 KB</strong>.</div>
+              <img id="editPreview" class="mt-2 d-none rounded" alt="preview" width="120" height="120" />
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+          <button class="btn btn-primary" type="submit">Save changes</button>
+        </div>
+      </form>
+    </div>
   </div>
 
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-  let selectedRating = 0, userMarker = null, currentSessionMedia = [], db;
-  let isEditing = false;
-  const mediaCounter = document.getElementById('mediaCounter');
-  const mediaLimitWarning = document.getElementById('mediaLimitWarning');
+  <!-- Toast -->
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080;">
+    <div id="toastSaved" class="toast align-items-center text-bg-success border-0" role="status" aria-live="polite" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">Review saved successfully!</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>
+  </div>
 
-  function updateMediaCounter(){
-    const imgCount = currentSessionMedia.filter(m => m.type.startsWith('image')).length;
-    const vidCount = currentSessionMedia.filter(m => m.type.startsWith('video')).length;
-    mediaCounter.textContent = `${imgCount}/5 images uploaded, ${vidCount}/2 videos uploaded`;
-  }
-
-  function formatDate(date){
-    if(!date) return '';
-    const d = new Date(date);
-    return d.toLocaleString();
-  }
-
-  const request = indexedDB.open("FoodReviewsDB", 1);
-  request.onupgradeneeded = e => { 
-    db = e.target.result; 
-    if(!db.objectStoreNames.contains("reviews")) 
-      db.createObjectStore("reviews", { keyPath: "id", autoIncrement: true }); 
-  };
-  request.onsuccess = e => { db = e.target.result; loadReviews(); };
-  request.onerror = e => { console.error("IndexedDB error:", e); };
-
-  function initStars() {
-    document.querySelectorAll('#starRating .star').forEach(star=>{
-      star.addEventListener('click', ()=>{ 
-        selectedRating = parseInt(star.dataset.value); 
-        updateStarDisplay(selectedRating); 
-      });
-      star.addEventListener('mouseover', ()=>{ if(!isEditing) updateStarDisplay(parseInt(star.dataset.value)); });
-      star.addEventListener('mouseout', ()=>{ if(!isEditing) updateStarDisplay(selectedRating); });
-    });
-  }
-  function updateStarDisplay(r){ 
-    document.querySelectorAll('#starRating .star').forEach(star=>{
-      star.classList.toggle('orange', parseInt(star.dataset.value)<=r); 
-      star.classList.toggle('gray', parseInt(star.dataset.value)>r); 
-    }); 
-  }
-
-  function showCreatePage(isNew=true){
-    if(isNew) isEditing = false;
-    document.getElementById('allReviewsPage').classList.add('hidden');
-    document.getElementById('createReviewPage').classList.remove('hidden');
-    if(isNew){
-      document.getElementById('reviewForm').reset();
-      selectedRating=0; updateStarDisplay(0);
-      currentSessionMedia=[]; renderMediaPreview();
-      document.getElementById('reviewForm').onsubmit = originalFormSubmit;
-      document.getElementById('createdDateDisplay').textContent='';
-      document.getElementById('updatedDateDisplay').textContent='';
-    }
-    setTimeout(()=>{ map.invalidateSize(); if(userMarker) map.setView(userMarker.getLatLng(),16); },100);
-  }
-  function showAllReviews(){ document.getElementById('createReviewPage').classList.add('hidden'); document.getElementById('allReviewsPage').classList.remove('hidden'); }
-  window.showCreatePage = showCreatePage; window.showAllReviews = showAllReviews;
-
-  const mediaUpload = document.getElementById('mediaUpload');
-  function renderMediaPreview(){
-    const preview = document.getElementById('mediaPreview');
-    preview.innerHTML='';
-    currentSessionMedia.forEach((f,index)=>{
-      const wrapper=document.createElement('div'); 
-      wrapper.className='media-wrapper relative'; 
-      wrapper.draggable=true; 
-      wrapper.dataset.index=index;
-
-      const element = f.type.startsWith('image') ? document.createElement('img') : document.createElement('video');
-      if(f.type.startsWith('video')){ element.src = f.url; element.muted = true; element.autoplay = true; element.loop = true; element.playsInline = true; element.controls = false; } 
-      else { element.src = f.url; }
-      element.style.objectFit = 'cover';
-      element.style.width = '100%';
-      element.style.height = '100px';
-      element.style.cursor = 'pointer';
-
-      const removeBtn=document.createElement('button'); 
-      removeBtn.textContent='✖';
-      removeBtn.className='absolute top-0 right-0 bg-white text-red-600 px-1 rounded-full shadow';
-      removeBtn.onclick=()=>{ currentSessionMedia.splice(index,1); renderMediaPreview(); updateMediaCounter(); };
-
-      const dragHandle=document.createElement('div');
-      dragHandle.textContent='⇅';
-      dragHandle.className='absolute bottom-0 left-0 bg-gray-600 text-white px-1 rounded-t mr-1 cursor-move';
-      dragHandle.style.userSelect='none';
-
-      wrapper.appendChild(element); 
-      wrapper.appendChild(removeBtn); 
-      wrapper.appendChild(dragHandle);
-
-      wrapper.addEventListener('dragstart', e=>{ e.dataTransfer.setData('text/plain', index); wrapper.classList.add('dragging'); });
-      wrapper.addEventListener('dragover', e=>{ e.preventDefault(); });
-      wrapper.addEventListener('drop', e=>{
-        e.preventDefault();
-        const draggedIndex = e.dataTransfer.getData('text/plain');
-        const targetIndex = wrapper.dataset.index;
-        if(draggedIndex==targetIndex) return;
-        const temp = currentSessionMedia[draggedIndex];
-        currentSessionMedia[draggedIndex] = currentSessionMedia[targetIndex];
-        currentSessionMedia[targetIndex] = temp;
-        renderMediaPreview();
-        updateMediaCounter();
-      });
-      wrapper.addEventListener('dragend', ()=>{ wrapper.classList.remove('dragging'); });
-
-      preview.appendChild(wrapper);
-    });
-    updateMediaCounter();
-    enableLightboxGallery();
-  }
-
-  if(mediaUpload){
-    mediaUpload.addEventListener('change', function(){
-      const files = Array.from(this.files);
-      files.forEach(file=>{
-        const imgCount = currentSessionMedia.filter(m=>m.type.startsWith('image')).length;
-        const vidCount = currentSessionMedia.filter(m=>m.type.startsWith('video')).length;
-        if(file.type.startsWith('image') && imgCount>=5){ mediaLimitWarning.classList.remove('hidden'); return; }
-        if(file.type.startsWith('video') && vidCount>=2){ mediaLimitWarning.classList.remove('hidden'); return; }
-        mediaLimitWarning.classList.add('hidden');
-        const reader=new FileReader();
-        reader.onload=e=>{
-          currentSessionMedia.push({url:e.target.result,type:file.type});
-          renderMediaPreview();
-        };
-        reader.readAsDataURL(file);
-      });
-    });
-  }
-
-  function originalFormSubmit(e){
-    e.preventDefault();
-    const userName=document.getElementById('userName').value.trim();
-    const restaurantName=document.getElementById('restaurantName').value.trim();
-    const foodName=document.getElementById('foodName').value.trim();
-    const fullAddress=document.getElementById('fullAddress').value.trim();
-    const comment=document.getElementById('comment').value.trim();
-    if(!userName||!restaurantName||!foodName||!fullAddress){ alert("Please fill in all required fields!"); return; }
-    if(selectedRating===0){ alert("Please select a star rating!"); return; }
-    if(currentSessionMedia.length===0){ alert("Please upload at least 1 image or video!"); return; }
-
-    const now = new Date();
-    const transaction = db.transaction(["reviews"], "readwrite");
-    const store = transaction.objectStore("reviews");
-    store.add({ userName, restaurantName, foodName, fullAddress, comment, rating:selectedRating, media:currentSessionMedia, createdDate: now, updatedDate: now });
-    transaction.oncomplete=()=>{ showCreatePage(true); showAllReviews(); loadReviews(); };
-    transaction.onerror=e=>{ console.error(e); alert("Failed to save review"); };
-  }
-  document.getElementById('reviewForm').onsubmit=originalFormSubmit;
-
-  function handleEditReview(r){
-    isEditing = true;
-    document.getElementById('userName').value = r.userName;
-    document.getElementById('restaurantName').value = r.restaurantName;
-    document.getElementById('foodName').value = r.foodName;
-    document.getElementById('fullAddress').value = r.fullAddress;
-    document.getElementById('comment').value = r.comment;
-    selectedRating = r.rating;
-    currentSessionMedia = r.media || [];
-    renderMediaPreview();
-    updateStarDisplay(selectedRating);
-
-    // Show timestamps
-    document.getElementById('createdDateDisplay').textContent = `Created: ${formatDate(r.createdDate)}`;
-    document.getElementById('updatedDateDisplay').textContent = r.updatedDate ? `Last Updated: ${formatDate(r.updatedDate)}` : '';
-
-    showCreatePage(false);
-
-    document.getElementById('reviewForm').onsubmit = function(e){
-      e.preventDefault();
-      const userName=document.getElementById('userName').value.trim();
-      const restaurantName=document.getElementById('restaurantName').value.trim();
-      const foodName=document.getElementById('foodName').value.trim();
-      const fullAddress=document.getElementById('fullAddress').value.trim();
-      const comment=document.getElementById('comment').value.trim();
-      if(!userName||!restaurantName||!foodName||!fullAddress){ alert("Please fill in all required fields!"); return; }
-      if(selectedRating===0){ alert("Please select a star rating!"); return; }
-      if(currentSessionMedia.length===0){ alert("Please upload at least 1 image or video!"); return; }
-
-      const now = new Date();
-      const transaction=db.transaction(["reviews"],"readwrite");
-      const store=db.transaction(["reviews"],"readwrite").objectStore("reviews");
-      store.put({id:r.id, userName, restaurantName, foodName, fullAddress, comment, rating:selectedRating, media:currentSessionMedia, createdDate: r.createdDate, updatedDate: now});
-      transaction.oncomplete=()=>{ showCreatePage(true); showAllReviews(); loadReviews(); document.getElementById('reviewForm').onsubmit=originalFormSubmit; isEditing=false; };
-    };
-  }
-
-  function loadReviews(){
-  const container=document.getElementById("reviewsContainer");
-  container.innerHTML="";
-  const transaction=db.transaction(["reviews"],"readonly");
-  const store=transaction.objectStore("reviews");
-  
-  let hasReviews = false; // <-- track if we find reviews
-
-  store.openCursor(null,"prev").onsuccess=function(e){
-    const cursor=e.target.result;
-    if(cursor){
-      hasReviews = true;
-      const r=cursor.value;
-      let starsHTML=''; for(let j=1;j<=5;j++) starsHTML+=`<span class='star ${j<=r.rating?'orange':'gray'}'>★</span>`;
-      let mediaHTML=''; if(r.media) r.media.forEach(f=>{ mediaHTML+=f.type.startsWith('image')?`<img src="${f.url}"/>`:`<video src="${f.url}"></video>`; });
-      const div=document.createElement("div");
-      div.className="bg-white p-4 rounded shadow w-full max-w-2xl";
-      div.innerHTML=`
-        <h3 class="font-bold">Restaurant/Stall Name: ${r.restaurantName}</h3>
-        <h3 class="font-bold">Food Name: ${r.foodName}</h3>
-        <p><strong>Username: ${r.userName}</strong> <br> Rated - ${starsHTML}</p>
-        <p>Address: ${r.fullAddress}</p>
-        ${r.comment?`<p><em>Comment:</em> ${r.comment}</p>`:''}
-        ${r.createdDate?`<p class="text-sm text-gray-400">Created: ${formatDate(r.createdDate)}</p>`:''}
-        ${r.updatedDate?`<p class="text-sm text-gray-600 italic">Last Updated: ${formatDate(r.updatedDate)}</p>`:''}
-        <div class="media-preview">${mediaHTML}</div>
-        <div class="flex gap-2 mt-2">
-          <button class="edit-btn bg-yellow-400 text-white px-2 py-1 rounded">Edit</button>
-          <button class="delete-btn bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+  <!-- Image Viewer Modal -->
+  <div class="modal fade" id="imgModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content border-0">
+        <div class="modal-body p-0 text-center">
+          <button type="button" class="btn-close position-absolute end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+          <img id="imgModalSrc" class="img-fluid rounded" alt="Review image">
+          <div class="mt-2 mb-2">
+            <a id="imgDownload" class="btn btn-sm btn-outline-secondary" href="#" download>Download</a>
+          </div>
         </div>
-      `;
-      container.appendChild(div);
-      div.querySelector('.edit-btn').addEventListener('click', ()=>handleEditReview(r));
-      div.querySelector('.delete-btn').addEventListener('click', ()=>{ if(confirm("Are you sure you want to delete this review?")){ const transaction=db.transaction(["reviews"],"readwrite"); const store=db.transaction(["reviews"],"readwrite").objectStore("reviews"); store.delete(r.id); transaction.oncomplete=loadReviews; }});
-      cursor.continue();
-    } else {
-      if(!hasReviews){
-        container.innerHTML = `<p class="text-gray-600 italic">No reviews have been created yet. Be the first to share your street food experience!</p>`;
+      </div>
+    </div>
+  </div>
+
+  <footer class="py-5 bg-light mt-5">
+    <div class="container text-center">
+      <p class="mb-2">Follow the #streetfood community:</p>
+      <blockquote class="twitter-timeline" data-theme="light" data-height="380" data-dnt="true" data-chrome="noheader nofooter noborders transparent" href="https://twitter.com/hashtag/streetfood?src=hash">Tweets about #streetfood</blockquote>
+      <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      <p class="mt-3 small text-muted">© 2025 Street Food — Built for UCCD2323 Front-End Web Development.</p>
+    </div>
+  </footer>
+
+  <script>
+  /* =========================
+     Utilities: Cookies
+     ========================= */
+  function setCookie(name, value, days = 180) {
+    const d = new Date();
+    d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+    document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/;SameSite=Lax`;
+  }
+  function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? decodeURIComponent(match[2]) : null;
+  }
+
+  $(function () {
+    /* =========================
+       Hero video auto-fallback (Coverr → Pixabay → MDN)
+       ========================= */
+    (function setupHeroVideo(){
+      const SOURCES = [
+        'https://cdn.coverr.co/videos/coverr-street-food-4842/1080p.mp4',
+        'https://cdn.pixabay.com/video/2021/06/10/75160-560258677_large.mp4',
+        'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4'
+      ];
+      const v = document.getElementById('heroVideo');
+      let i = 0;
+      function tryNext() {
+        if (i >= SOURCES.length) return;
+        v.src = SOURCES[i++];
+        v.load();
       }
+      v.addEventListener('error', tryNext, { passive: true });
+      v.addEventListener('stalled', () => setTimeout(tryNext, 1200), { passive: true });
+      tryNext();
+    })();
+
+    /* =========================
+       Theme & Cookie Banner
+       ========================= */
+    const cookieBar = $('#cookieBar');
+    const themeBtn = $('#toggleTheme');
+
+    function applyTheme() {
+      const theme = getCookie('theme') || 'light';
+      document.body.dataset.theme = theme;
+      themeBtn.text(theme === 'dark' ? '☀️ Theme' : '🌙 Theme');
     }
-  };
-}
 
+    if (getCookie('consent') !== 'yes') cookieBar.removeClass('d-none');
+    $('#acceptCookies').on('click', () => { setCookie('consent', 'yes'); cookieBar.addClass('d-none'); });
+    $('#declineCookies').on('click', () => cookieBar.addClass('d-none'));
+    applyTheme();
+    themeBtn.on('click', () => {
+      const current = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+      setCookie('theme', current);
+      applyTheme();
+    });
 
-  // Map & Geolocation
-  const map=L.map('map').setView([3.139,101.6869],6);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);
-  L.Control.geocoder({defaultMarkGeocode:false}).on('markgeocode',function(e){ const c=e.geocode.center; if(userMarker) map.removeLayer(userMarker); userMarker=L.marker(c).addTo(map); map.setView(c,16); document.getElementById('fullAddress').value=e.geocode.name; }).addTo(map);
-
-  window.getLocation=function(){
-    const fullAddressInput=document.getElementById('fullAddress');
-    if(!navigator.geolocation){ alert("Geolocation not supported."); return; }
-    navigator.geolocation.getCurrentPosition(async pos=>{
-      const lat=pos.coords.latitude; const lng=pos.coords.longitude;
-      try{ const res=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`,{headers:{'Accept':'application/json'}}); const data=await res.json(); fullAddressInput.value=data.display_name||`${lat}, ${lng}`; if(userMarker) map.removeLayer(userMarker); userMarker=L.marker([lat,lng]).addTo(map).bindPopup('You are here').openPopup(); map.setView([lat,lng],16); }catch(err){ console.error(err); fullAddressInput.value=`${lat}, ${lng}`; }
-    }, err=>{ alert("Unable to retrieve your location."); }, { enableHighAccuracy:true, timeout:10000 });
-  }
-
-  initStars();
-
-  // Lightbox
-  const lightboxOverlay=document.getElementById('lightboxOverlay');
-  const lightboxContent=document.getElementById('lightboxContent');
-  const closeBtn=lightboxOverlay.querySelector('.closeBtn');
-  let currentMediaList=[], currentMediaIndex=0;
-
-  function openLightbox(mediaList,index){
-    currentMediaList = mediaList;
-    currentMediaIndex = index;
-    renderLightbox();
-    lightboxOverlay.classList.add('active');
-  }
-
-  function renderLightbox(){
-    lightboxContent.innerHTML='';
-    const media = currentMediaList[currentMediaIndex];
-    if(!media) return;
-    if(media.type.startsWith('image')){
-      const img=document.createElement('img'); img.src=media.url; lightboxContent.appendChild(img);
-    } else if(media.type.startsWith('video')){
-      const vid=document.createElement('video'); vid.src=media.url; vid.controls=true; vid.autoplay=true; vid.muted=false; lightboxContent.appendChild(vid);
+    /* =========================
+       Helpers
+       ========================= */
+    const draftKeys = ['stallName', 'foodName', 'location', 'reviewText'];
+    function clearValidation(formEl) {
+      formEl.classList.remove('was-validated');
+      formEl.querySelectorAll('.is-valid, .is-invalid').forEach(el => {
+        el.classList.remove('is-valid', 'is-invalid');
+      });
     }
-  }
 
-  lightboxOverlay.querySelector('.arrow.left').onclick=()=>{ if(currentMediaIndex>0){ currentMediaIndex--; renderLightbox(); } };
-  lightboxOverlay.querySelector('.arrow.right').onclick=()=>{ if(currentMediaIndex<currentMediaList.length-1){ currentMediaIndex++; renderLightbox(); } };
-  closeBtn.onclick=()=>{ lightboxOverlay.classList.remove('active'); lightboxContent.innerHTML=''; };
-  lightboxOverlay.onclick=(e)=>{ if(e.target===lightboxOverlay){ lightboxOverlay.classList.remove('active'); lightboxContent.innerHTML=''; } };
-  document.addEventListener('keydown', e => { if(!lightboxOverlay.classList.contains('active')) return; if(e.key==='ArrowLeft'){ if(currentMediaIndex>0){ currentMediaIndex--; renderLightbox(); } } if(e.key==='ArrowRight'){ if(currentMediaIndex<currentMediaList.length-1){ currentMediaIndex++; renderLightbox(); } } if(e.key==='Escape'){ lightboxOverlay.classList.remove('active'); lightboxContent.innerHTML=''; } });
-
-  let touchStartX=0, touchEndX=0;
-  lightboxOverlay.addEventListener('touchstart', e=>{ touchStartX=e.changedTouches[0].screenX; });
-  lightboxOverlay.addEventListener('touchend', e=>{ touchEndX=e.changedTouches[0].screenX; handleSwipe(); });
-  function handleSwipe(){ const diff=touchEndX-touchStartX; if(Math.abs(diff)>50){ if(diff>0){ if(currentMediaIndex>0){ currentMediaIndex--; renderLightbox(); } } else{ if(currentMediaIndex<currentMediaList.length-1){ currentMediaIndex++; renderLightbox(); } } } }
-
-  function enableLightboxGallery(){
-    document.querySelectorAll('.media-preview').forEach(container=>{
-      const mediaEls = Array.from(container.querySelectorAll('img, video'));
-      mediaEls.forEach((el,index)=>{
-        if(!el.dataset.lightboxBound){
-          el.dataset.lightboxBound='true';
-          el.onclick=()=>{
-            const mediaList = mediaEls.map(me=>({url:me.src,type:me.tagName.toLowerCase()==='img'?'image':'video'}));
-            openLightbox(mediaList,index);
-          };
-        }
+    /* =========================
+       Rating stars (Create form)
+       ========================= */
+    $('#rating .star').on('mouseenter click', function () {
+      const val = Number($(this).data('val'));
+      $('#ratingVal').val(val);
+      $('#rating .star').each(function () {
+        $(this).toggleClass('active', Number($(this).data('val')) <= val);
       });
     });
-  }
 
-  enableLightboxGallery();
-  const observerGallery=new MutationObserver(enableLightboxGallery);
-  observerGallery.observe(document.body,{childList:true,subtree:true});
+    /* =========================
+       Media preview (Create) with 100KB cap
+       ========================= */
+    $('#photo').on('change', function () {
+      const file = this.files?.[0];
+      const max = Number(this.dataset.maxBytes || '102400'); // 100 KB
+      if (!file) { $('#preview').addClass('d-none').attr('src', ''); return; }
+      if (file.size > max) {
+        alert(`Selected file is ${Math.round(file.size / 1024)}KB. Max allowed is 100KB.`);
+        this.value = '';
+        $('#preview').addClass('d-none').attr('src', '');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = e => { $('#preview').attr('src', e.target.result).removeClass('d-none'); };
+      reader.readAsDataURL(file);
+    });
 
-});
+    /* =========================
+       Lightbox: click thumbnail to view full image
+       ========================= */
+    $('#reviews').on('click', '.thumb', function () {
+      const src = $(this).attr('src');
+      const alt = $(this).attr('alt') || 'Review image';
+      $('#imgModalSrc').attr({ src, alt });
+      const name = (alt || 'image').replace(/[^\w\-]+/g, '_') + '.jpg';
+      $('#imgDownload').attr({ href: src, download: name });
+      new bootstrap.Modal('#imgModal').show();
+    });
+
+    /* =========================
+       Draft autosave (sessionStorage)
+       ========================= */
+    draftKeys.forEach(id => {
+      const saved = sessionStorage.getItem('draft_' + id);
+      if (saved) $('#' + id).val(saved);
+      $('#' + id).on('input', function () { sessionStorage.setItem('draft_' + id, this.value); });
+    });
+
+    /* =========================
+       Save Review -> localStorage
+       ========================= */
+    const toastSaved = new bootstrap.Toast('#toastSaved');
+
+    $('#formReview').on('submit', function (e) {
+      e.preventDefault();
+      const form = this;
+
+      form.classList.add('was-validated');
+      if (!form.checkValidity() || Number($('#ratingVal').val()) === 0) {
+        if (Number($('#ratingVal').val()) === 0) alert('Please select a rating.');
+        return;
+      }
+
+      // Extra size check
+      const fileInput = document.getElementById('photo');
+      const f = fileInput.files?.[0];
+      if (f && f.size > Number(fileInput.dataset.maxBytes || '102400')) {
+        alert('Media exceeds 100KB limit. Please choose a smaller file.');
+        return;
+      }
+
+      const id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now());
+      const review = {
+        id,
+        stall: $('#stallName').val().trim(),
+        food: $('#foodName').val().trim(),
+        loc: $('#location').val().trim(),
+        rating: Number($('#ratingVal').val()),
+        text: $('#reviewText').val().trim(),
+        img: $('#preview').attr('src') || null,
+        ts: Date.now()
+      };
+
+      const list = JSON.parse(localStorage.getItem('reviews') || '[]');
+      list.push(review);
+      localStorage.setItem('reviews', JSON.stringify(list));
+
+      // Reset UI + clear drafts/validation
+      draftKeys.forEach(k => sessionStorage.removeItem('draft_' + k));
+      form.reset();
+      $('#ratingVal').val(0);
+      $('#preview').addClass('d-none').attr('src', '');
+      $('#rating .star').removeClass('active');
+      clearValidation(form);
+
+      document.getElementById('chime')?.play().catch(() => { });
+      toastSaved.show();
+      renderReviews();
+    });
+
+    $('#btnClear').on('click', () => {
+      const form = document.getElementById('formReview');
+      form.reset();
+      $('#ratingVal').val(0);
+      $('#preview').addClass('d-none').attr('src', '');
+      $('#rating .star').removeClass('active');
+      clearValidation(form);
+    });
+
+    /* =========================
+       Render Reviews
+       ========================= */
+    function renderReviews(sortBy = 'new') {
+      const list = JSON.parse(localStorage.getItem('reviews') || '[]');
+      list.sort((a, b) => sortBy === 'rating' ? b.rating - a.rating : b.ts - a.ts);
+      const grid = $('#reviews').empty();
+      if (!list.length) {
+        grid.append(`<div class="col-12"><div class="alert alert-info">No reviews yet. Be the first!</div></div>`);
+        return;
+      }
+      list.forEach(r => {
+        const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+        grid.append(`
+          <div class="col-12 col-md-6">
+            <div class="card review-card h-100">
+              <div class="card-body d-flex gap-3">
+                <img class="thumb" src="${r.img || 'https://images.unsplash.com/photo-1526318472351-c75fcf070305?q=80&w=200&auto=format&fit=crop'}" alt="${r.stall} image">
+                <div class="flex-grow-1">
+                  <div class="d-flex align-items-start justify-content-between">
+                    <div>
+                      <h3 class="h6 mb-1">${r.stall}</h3>
+                      <div class="text-muted small">${r.loc}</div>
+                      <span class="badge rounded-pill text-bg-light mt-1">🍽️ ${r.food || '—'}</span>
+                    </div>
+                    <span class="badge text-bg-warning">${stars}</span>
+                  </div>
+                  <p class="mt-2 mb-2">${r.text}</p>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-outline-primary" data-action="edit" data-id="${r.id}">Edit</button>
+                    <button class="btn btn-sm btn-outline-danger" data-action="del" data-id="${r.id}">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>`);
+      });
+    }
+    renderReviews();
+    $('#sortNewest').on('click', () => renderReviews('new'));
+    $('#sortRating').on('click', () => renderReviews('rating'));
+
+    /* =========================
+       Delete or Open Edit
+       ========================= */
+    let currentEditIndex = -1;
+
+    $('#reviews').on('click', '[data-action]', function () {
+      const id = $(this).data('id');
+      const list = JSON.parse(localStorage.getItem('reviews') || '[]');
+      const idx = list.findIndex(x => x.id === id);
+      if (idx < 0) return;
+
+      if ($(this).data('action') === 'del') {
+        if (confirm('Delete this review?')) {
+          list.splice(idx, 1);
+          localStorage.setItem('reviews', JSON.stringify(list));
+          renderReviews();
+        }
+      } else {
+        // Open full edit modal
+        currentEditIndex = idx;
+        const r = list[idx];
+        $('#editId').val(r.id);
+        $('#editStall').val(r.stall);
+        $('#editFood').val(r.food || '');
+        $('#editLoc').val(r.loc);
+        $('#editText').val(r.text);
+        setEditStars(Number(r.rating) || 0);
+
+        if (r.img) {
+          $('#editPreview').attr('src', r.img).removeClass('d-none');
+        } else {
+          $('#editPreview').addClass('d-none').attr('src', '');
+        }
+        document.getElementById('editPhoto').value = '';
+        clearValidation(document.getElementById('formEditFull'));
+        new bootstrap.Modal('#editModal').show();
+      }
+    });
+
+    /* =========================
+       Edit: stars, media preview, save
+       ========================= */
+    function setEditStars(val) {
+      $('#editRatingVal').val(val);
+      $('#editRating .star').each(function () {
+        $(this).toggleClass('active', Number($(this).data('val')) <= val);
+      });
+    }
+    $('#editRating').on('mouseenter click', '.star', function () {
+      setEditStars(Number($(this).data('val')));
+    });
+
+    $('#editPhoto').on('change', function () {
+      const file = this.files?.[0];
+      const max = Number(this.dataset.maxBytes || '102400');
+      if (!file) { $('#editPreview').addClass('d-none').attr('src', ''); return; }
+      if (file.size > max) {
+        alert(`Selected file is ${Math.round(file.size / 1024)}KB. Max allowed is 100KB.`);
+        this.value = '';
+        $('#editPreview').addClass('d-none').attr('src', '');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = e => { $('#editPreview').attr('src', e.target.result).removeClass('d-none'); };
+      reader.readAsDataURL(file);
+    });
+
+    $('#formEditFull').on('submit', function (e) {
+      e.preventDefault();
+      const form = this;
+      form.classList.add('was-validated');
+      if (!form.checkValidity() || Number($('#editRatingVal').val()) === 0) {
+        if (Number($('#editRatingVal').val()) === 0) alert('Please select a rating.');
+        return;
+      }
+
+      const list = JSON.parse(localStorage.getItem('reviews') || '[]');
+      if (currentEditIndex < 0 || currentEditIndex >= list.length) return;
+
+      const fp = document.getElementById('editPhoto');
+      const f = fp.files?.[0];
+      if (f && f.size > Number(fp.dataset.maxBytes || '102400')) {
+        alert('Media exceeds 100KB limit. Please choose a smaller file.');
+        return;
+      }
+
+      const old = list[currentEditIndex];
+      const updated = {
+        ...old,
+        stall: $('#editStall').val().trim(),
+        food: $('#editFood').val().trim(),
+        loc: $('#editLoc').val().trim(),
+        rating: Number($('#editRatingVal').val()),
+        text: $('#editText').val().trim(),
+        img: (fp.files && fp.files.length) ? ($('#editPreview').attr('src') || null) : old.img
+      };
+
+      list[currentEditIndex] = updated;
+      localStorage.setItem('reviews', JSON.stringify(list));
+      renderReviews();
+
+      bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
+      clearValidation(form);
+    });
+
+    document.getElementById('editModal').addEventListener('hidden.bs.modal', () => {
+      const ef = document.getElementById('formEditFull');
+      ef.reset();
+      $('#editPreview').addClass('d-none').attr('src', '');
+      setEditStars(0);
+      clearValidation(ef);
+    });
+  });
 </script>
 
-  <footer>
-    <p>© 2025 Malaysian Street Food. All rights reserved.</p>
-  </footer>
 </body>
 </html>

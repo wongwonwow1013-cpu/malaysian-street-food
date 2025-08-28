@@ -5,6 +5,99 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Events - Malaysian Street Food</title>
   <link rel="stylesheet" href="style.css">
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    /* Grid Layout */
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    /* Card Style */
+    .event-card {
+      background: #fff;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+
+    .event-card:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Image Section */
+    .event-img {
+      position: relative;
+    }
+
+    .event-img img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .event-date {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: #ff6b35;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 0.9rem;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    /* Content */
+    .event-content {
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .event-content h2 {
+      font-size: 1.2rem;
+      margin: 0;
+      color: #333;
+    }
+
+    .event-location {
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .event-content p {
+      font-size: 0.9rem;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    /* Button */
+    .map-btn {
+      background: #ff6b35;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    .map-btn:hover {
+      background: #e85c2a;
+    }
+  </style>
 </head>
 <body>
 
@@ -27,79 +120,75 @@
     <h2>Upcoming Street Food Events</h2>
     <div class="underline"></div>
 
-    <div class="events-grid">
-      <!-- Event 1 -->
-      <div class="event-card">
-        <div class="event-img">
-          <img src="bangkok-rod-fai-market-0900.jpg" alt="Bangkok Market">
-          <span class="event-date">  10–15 Mar, 2026</span>
-        </div>
-        <div class="event-content">
-          <h2>Flavours of Penang Street Food Fest</h2>
-          <p class="event-location">📍 Gurney Drive, Penang, Malaysia.</p><br>
-          <p>A celebration of Penang’s famous hawker delights, from char kway teow sizzling on woks to fragrant nasi kandar.</p>
-        </div>
-      </div>
-
-      <!-- Event 2 -->
-      <div class="event-card">
-        <div class="event-img">
-          <img src="Jalan-Alor-street-food-kuala-lumpur-1244x700.jpg" alt="Jalan Alor Street Food">
-          <span class="event-date"> 6–8 June 2026</span>
-        </div>
-        <div class="event-content">
-          <h2>Kuala Lumpur Street Food Fiesta</h2>
-          <p class="event-location">📍 Jalan Alor, Kuala Lumpur, Malaysia.</p><br>
-          <p>Discover Malaysia’s favorite street food like nasi lemak, char kway teow, and satay, served fresh from local stalls.</p>
-        </div>
-      </div>
-
-      <!-- Event 3 -->
-      <div class="event-card">
-        <div class="event-img">
-          <img src="malacca.jpg" alt="malacca">
-          <span class="event-date">  20–22 May, 2026</span>
-        </div>
-        <div class="event-content">
-          <h2>Malacca Food Carnival</h2>
-          <p class="event-location">📍 Jonker Street, Malacca, Malaysia.</p><br>
-          <p>Held in the heart of Malacca’s UNESCO heritage site. Visitors can enjoy traditional Peranakan snacks and cendol while strolling through decorated heritage houses and street art corners.</p>
-        </div>
-      </div>
-
-         <!-- Event 4 -->
-      <div class="event-card">
-        <div class="event-img">
-          <img src="sabah.jpg" alt="Sabah Street Food">
-          <span class="event-date"> 18–20 July 2026</span>
-        </div>
-        <div class="event-content">
-          <h2>Sabah Street Eats Fiesta</h2>
-          <p class="event-location">📍 Kota Kinabalu Waterfront, Sabah, Malaysia.</p><br>
-          <p>A vibrant food fiesta showcasing fresh seafood BBQ, hinava, and local fusion dishes. The event features sunset seaside dining, cultural dance shows, and live band performances by local artists.</p>
-        </div>
-      </div>
-
-      <!-- Event 5 -->
-      <div class="event-card">
-        <div class="event-img">
-          <img src="best-street-food-mexico-city-el-vilsito.webp.jpg" alt="Mexico City Street Food">
-          <span class="event-date"> 10–12 October 2026</span>
-        </div>
-        <div class="event-content">
-          <h2>Sarawak Flavour Trails</h2>
-          <p class="event-location">📍 Kuching Waterfront, Sarawak, Malaysia.</p><br>
-          <p>Discover the rich flavors of Sarawak with kolo mee, laksa Sarawak, and layered kek lapis stalls lining the riverbank.</p>
-        </div>
-      </div>
+    <div id="events" class="events-grid">
+      <!-- Events will be loaded here -->
     </div>
-
-       
-
   </main>
 
   <footer>
     <p>© 2025 Malaysian Street Food. All rights reserved.</p>
   </footer>
+
+  <script>
+  const events = [
+    {
+      name: "Flavours of Penang Street Food Fest",
+      date: "10–15 Mar, 2026",
+      place: "Gurney Drive, Penang, Malaysia",
+      img: "images_events/bangkok-rod-fai-market-0900.jpg"
+    },
+    {
+      name: "Kuala Lumpur Street Food Fiesta",
+      date: "6–8 June 2026",
+      place: "Jalan Alor, Kuala Lumpur, Malaysia",
+      img: "images_events/Jalan-Alor-street-food-kuala-lumpur-1244x700.jpg"
+    },
+    {
+      name: "Malacca Food Carnival",
+      date: "20–22 May, 2026",
+      place: "Jonker Street, Malacca, Malaysia",
+      img: "images_events/malacca.jpg"
+    },
+    {
+      name: "Sabah Street Eats Fiesta",
+      date: "18–20 July 2026",
+      place: "Kota Kinabalu Waterfront, Sabah, Malaysia",
+      img: "images_events/sabah.jpg"
+    },
+    {
+      name: "Sarawak Flavour Trails",
+      date: "10–12 October 2026",
+      place: "Kuching Waterfront, Sarawak, Malaysia",
+      img: "images_events/best-street-food-mexico-city-el-vilsito.webp.jpg"
+    }
+  ];
+
+  $(document).ready(function () {
+    events.forEach(event => {
+      $.getJSON(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(event.place)}`, function(data) {
+        if (data && data.length > 0) {
+          let loc = data[0];
+          let mapUrl = `https://www.openstreetmap.org/?mlat=${loc.lat}&mlon=${loc.lon}#map=16/${loc.lat}/${loc.lon}`;
+
+          let card = `
+            <div class="event-card">
+              <div class="event-img">
+                <img src="${event.img}" alt="${event.name}">
+                <span class="event-date">${event.date}</span>
+              </div>
+              <div class="event-content">
+                <h2>${event.name}</h2>
+                <p class="event-location">📍 ${loc.display_name}</p>
+                <button onclick="window.open('${mapUrl}', '_blank')" class="map-btn">View on Map</button>
+                <p>Located at ${event.place}. Enjoy local street food vibes with authentic flavors!</p>
+              </div>
+            </div>
+          `;
+          $("#events").append(card);
+        }
+      });
+    });
+  });
+</script>
 </body>
 </html>
